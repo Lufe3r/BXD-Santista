@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        <h2>LOGIN</h2>
+        <input type="email" name="email" placeholder="Insira seu email" required><br>
+        <input type="password" name="senha" placeholder="Insira sua senha" required><br>
+        <a href="{% url 'home_cliente' %}"><button type="submit">Login</button></a>
+    </form>
+</body>
+</html>

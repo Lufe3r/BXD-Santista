@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="nome" placeholder="Insira seu nome" required><br>
+        <input type="email" name="email" placeholder="Insira seu email" required><br>
+        <input type="password" name="senha" placeholder="Insira sua senha" required><br>
+        <input type="password" name="confirma_senha" placeholder="Confirme sua senha" required><br>
+        <a href="{% url 'cliente_home' %}"><button type="submit">Cadastrar</button></a>
+    </form>
+    
+    <!-- Link com popup para trocar para vendedor -->
+    <p>
+        <a href="{% url 'cadastro_comercio' %}" onclick="return confirmarTroca();">
+            Clique aqui para entrar como vendedor
+        </a>
+    </p>
+    
+    <!-- JavaScript de confirmação -->
+    <script>
+    function confirmarTroca() {
+        return confirm("Você deseja realmente trocar para o cadastro de vendedor?");
+    }
+    </script>
+</body>
+</html>
