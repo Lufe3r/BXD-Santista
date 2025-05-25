@@ -24,3 +24,4 @@ def login_comercio(request):
 
 def home_cliente(request):
     return render(request, "home_cliente.html")
+
