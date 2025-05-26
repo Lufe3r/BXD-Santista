@@ -6,14 +6,13 @@
     <title>Document</title>
 </head>
 <body>
-    <form method="post">
-        {% csrf_token %}
-        <input type="text" name="nome" placeholder="Insira seu nome" required><br>
-        <input type="email" name="email" placeholder="Insira seu email" required><br>
-        <input type="password" name="senha" placeholder="Insira sua senha" required><br>
-        <input type="password" name="confirma_senha" placeholder="Confirme sua senha" required><br>
-        <a href="{% url 'home_cliente' %}"><button type="submit">Cadastrar</button></a>
-    </form>
+<form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+    <p>{{ field.label_tag }} {{ field }}</p>
+    {% endfor %}
+    <button type="submit">Cadastrar</button>
+</form>
     
     <!-- Link com popup para trocar para vendedor -->
     <p>

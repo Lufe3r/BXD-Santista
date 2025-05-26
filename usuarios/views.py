@@ -4,26 +4,21 @@ from django.contrib.auth.hashers import make_password
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 from .models import Cliente, Comercio  # modelo do vendedor
-
+from .forms import ClienteForm
 
 
 def cadastro_cliente(request):
     if request.method == 'POST':
-        nome = request.POST['nome']
-        email = request.POST['email']
-        senha = request.POST['senha']
-        confirma = request.POST['confirma_senha']
+        form = ClienteForm(request.POST)
+        if form.is_valid():
+            cliente = form.save(commit=False)
+            cliente.senha = make_password(form.cleaned_data['senha'])
+            cliente.save()
+            return redirect('home_cliente')
+    else:
+        form = ClienteForm()
+    return render(request, 'cadastro_cliente.html', {'form': form})
 
-        if senha == confirma:
-            print("Salvando cliente:", nome, email)
-            cliente = Cliente(
-                nome=nome,
-                email=email,
-                senha=make_password(senha)
-            )
-            cliente.save() 
-            return redirect('login_cliente')
-    return render(request, 'cadastro_cliente.html')
 
 def cadastro_comercio(request):
     if request.method == 'POST':
