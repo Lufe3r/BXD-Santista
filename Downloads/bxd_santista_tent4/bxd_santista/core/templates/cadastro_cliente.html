@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro Cliente</title>
+</head>
+<body>
+    <h1>Cadastro de Cliente</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Cadastrar</button>
+    </form>
+
+    <p>
+        <a href="{% url 'cadastro_comercio' %}" onclick="return confirmarTroca();">
+            Clique aqui para entrar como vendedor
+        </a>
+    </p>
+
+    <script>
+    function confirmarTroca() {
+        return confirm("Você deseja realmente trocar para o cadastro de vendedor?");
+    }
+    </script>
+</body>
+</html>

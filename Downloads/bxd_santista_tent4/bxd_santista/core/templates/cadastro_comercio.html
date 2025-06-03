@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro Comércio</title>
+</head>
+<body>
+    <h1>Cadastro de Comércio</h1>
+
+    <form method="post">
+    {% csrf_token %}
+    <p>{{ form.nome.label_tag }} {{ form.nome }}</p>
+    <p>{{ form.email.label_tag }} {{ form.email }}</p>
+    <p>{{ form.estabelecimento.label_tag }} {{ form.estabelecimento }}</p>
+    <p>{{ form.cnpj.label_tag }} {{ form.cnpj }}</p>
+
+    <button type="submit">Cadastrar</button>
+</form>
+
+    <p>
+        <a href="{% url 'cadastro_cliente' %}" onclick="return confirmarTroca();">
+            Clique aqui para entrar como cliente
+        </a>
+    </p>
+
+    <script>
+    function confirmarTroca() {
+        return confirm("Você deseja realmente trocar para o cadastro de cliente?");
+    }
+    </script>
+</body>
+</html>

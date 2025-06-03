@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Comércio</title>
+</head>
+<body>
+    <h1>Login Comércio</h1>
+   <form method="post">
+  {% csrf_token %}
+  <input type="text" name="cnpj" placeholder="CNPJ" required>
+  <input type="text" name="chave_acesso" placeholder="Chave de Acesso" required>
+  <button type="submit">Entrar</button>
+  {% if erro %}
+    <p style="color: red;">{{ erro }}</p>
+  {% endif %}
+</form>
+</body>
+</html>
