@@ -6,14 +6,9 @@
 </head>
 <body>
     <h1>Cadastro de Comércio</h1>
-
-    <form method="post">
+<form method="post">
     {% csrf_token %}
-    <p>{{ form.nome.label_tag }} {{ form.nome }}</p>
-    <p>{{ form.email.label_tag }} {{ form.email }}</p>
-    <p>{{ form.estabelecimento.label_tag }} {{ form.estabelecimento }}</p>
-    <p>{{ form.cnpj.label_tag }} {{ form.cnpj }}</p>
-
+    {{ form.as_p }}
     <button type="submit">Cadastrar</button>
 </form>
 

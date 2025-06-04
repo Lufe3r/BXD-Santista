@@ -10,8 +10,11 @@ urlpatterns = [
     path('login/comercio',views.login_comercio, name='login_comercio'),
     path('home/cliente',views.home_cliente, name='home_cliente'),
     path('home/comercio',views.home_comercio, name='home_comercio'),
-    
-    
+    path('perfil/comercio',views.perfil_comercio, name='perfil_comercio'),
+    path('estoque',views.estoque, name='estoque'),
+    path('estoque/adicionar/', views.adicionar_produto, name='adicionar_produto'),
+    path('estoque/editar/<int:produto_id>/', views.editar_produto, name='editar_produto'),
+    path('estoque/remover/<int:produto_id>/', views.remover_produto, name='remover_produto'),
 ]
 
 #path('',views., name=''),

@@ -1,19 +1,22 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Login Comércio</title>
+  <title>Login Comércio</title>
 </head>
 <body>
-    <h1>Login Comércio</h1>
-   <form method="post">
-  {% csrf_token %}
-  <input type="text" name="cnpj" placeholder="CNPJ" required>
-  <input type="text" name="chave_acesso" placeholder="Chave de Acesso" required>
-  <button type="submit">Entrar</button>
-  {% if erro %}
-    <p style="color: red;">{{ erro }}</p>
+  <h2>Login Comércio</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Entrar</button>
+  </form>
+
+  {% if messages %}
+    <ul>
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
   {% endif %}
-</form>
 </body>
 </html>

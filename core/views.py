@@ -1,91 +1,85 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.core.mail import send_mail
 from django.contrib import messages
-from .forms import ComercioForm, ClienteForm, LoginClienteForm, LoginComercioForm
-from .models import Cliente, Comercio
+from .forms import ComercioForm, ClienteForm, LoginClienteForm, LoginComercioForm, ProdutoForm
+from .models import Cliente, Comercio, Produto
 from django.conf import settings
-from .utils import gerar_chave_acesso
+
 
 
 def cadastro_cliente(request):
     if request.method == 'POST':
         form = ClienteForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('home_cliente')  # ou outro destino após cadastro
+            cliente = form.save(commit=False)  
+            senha = form.cleaned_data['senha']
+            cliente.set_senha(senha)          
+            cliente.save()                     
+            return redirect('home_cliente')
     else:
         form = ClienteForm()
-    
+
     return render(request, 'cadastro_cliente.html', {'form': form})
+
 
 def cadastro_comercio(request):
     if request.method == 'POST':
-        nome = request.POST['nome']
-        email = request.POST['email']
-        estabelecimento = request.POST['estabelecimento']
-        cnpj = request.POST['cnpj']
-
-        chave = gerar_chave_acesso()
-
-        comercio = Comercio.objects.create(
-            nome=nome,
-            email=email,
-            estabelecimento=estabelecimento,
-            cnpj=cnpj,
-            chave_acesso=chave
-        )
-
-        send_mail(
-            'Chave de Acesso - BXD Santista',
-            f'Sua chave de acesso é: {chave}\nUse essa chave junto com seu CNPJ para fazer login.',
-            settings.DEFAULT_FROM_EMAIL,
-            [email],
-            fail_silently=False,
-        )
-
-        return redirect('login_comercio')
-
-    form = ComercioForm()
+        form = ComercioForm(request.POST)
+        if form.is_valid():
+            comercio = form.save(commit=False) 
+            senha = form.cleaned_data['senha']
+            comercio.set_senha(senha)          
+            comercio.save()                     
+            return redirect('login_comercio')
+    else:
+        form = ComercioForm()
     return render(request, 'cadastro_comercio.html', {'form': form})
 
 def login_cliente(request):
     if request.method == 'POST':
         form = LoginClienteForm(request.POST)
         if form.is_valid():
-            nome = form.cleaned_data['nome']
+            usuario = form.cleaned_data['usuario']
             senha = form.cleaned_data['senha']
-            
-            cliente = Cliente.objects.filter(nome=nome).first()
-            if cliente:
-                if cliente.senha == senha:
+
+            try:
+                cliente = Cliente.objects.get(nome=usuario)  
+                if cliente.check_senha(senha):
                     request.session['cliente_id'] = cliente.id
-                    messages.success(request, 'Login realizado com sucesso!')
                     return redirect('home_cliente')
                 else:
-                    messages.error(request, 'Senha incorreta.')
-            else:
-                messages.error(request, 'Nome de usuário não encontrado.')
+                    messages.error(request, 'Usuário ou senha inválidos.')
+            except Cliente.DoesNotExist:
+                messages.error(request, 'Usuário ou senha inválidos.')
     else:
         form = LoginClienteForm()
-    
+
     return render(request, 'login_cliente.html', {'form': form})
 
 def login_comercio(request):
     if request.method == 'POST':
-        cnpj = request.POST['cnpj']
-        chave = request.POST['chave_acesso']
+        form = LoginComercioForm(request.POST)
+        if form.is_valid():
+            cnpj = form.cleaned_data['cnpj']
+            senha = form.cleaned_data['senha']
 
-        try:
-            comercio = Comercio.objects.get(cnpj=cnpj, chave_acesso=chave)
-            # Autenticação simples (você pode usar session para login real)
-            request.session['comercio_id'] = comercio.id
-            return redirect('painel_comercio')  # redirecione como preferir
-        except Comercio.DoesNotExist:
-            return render(request, 'login_comercio.html', {'erro': 'CNPJ ou chave incorretos.'})
+            try:
+                comercio = Comercio.objects.get(cnpj=cnpj)
+                if comercio.check_senha(senha):
+                    request.session['comercio_id'] = comercio.id
+                    return redirect('home_comercio')
+                else:
+                    messages.error(request, 'Senha incorreta.')
+            except Comercio.DoesNotExist:
+                messages.error(request, 'CNPJ não encontrado.')
+        else:
+            messages.error(request, 'Formulário inválido.')
+    else:
+        form = LoginComercioForm()
 
-    return render(request, 'login_comercio.html')
+    return render(request, 'login_comercio.html', {'form': form})
 
 def escolha(request):
     return render(request, 'escolha.html')
@@ -98,3 +92,57 @@ def home_comercio(request):
 
 def home(request):
     return render(request, 'home.html')
+
+def perfil_comercio(request):
+    return render(request, 'perfil_comercio.html')
+
+def estoque(request):
+    comercio_id = request.session.get('comercio_id')
+    if not comercio_id:
+        return redirect('login_comercio')
+
+    produtos = Produto.objects.filter(comercio_id=comercio_id)
+    return render(request, 'estoque.html', {'produtos': produtos})
+
+def adicionar_produto(request):
+    comercio_id = request.session.get('comercio_id')
+    if not comercio_id:
+        return redirect('login_comercio')
+
+    if request.method == 'POST':
+        form = ProdutoForm(request.POST)
+        if form.is_valid():
+            produto = form.save(commit=False)
+            produto.comercio_id = comercio_id
+            produto.save() 
+            return redirect('estoque')
+    else:
+        form = ProdutoForm()
+    return render(request, 'form_produto.html', {'form': form})
+
+def editar_produto(request, produto_id):
+    comercio_id = request.session.get('comercio_id')
+    if not comercio_id:
+        return redirect('login_comercio')
+
+    produto = get_object_or_404(Produto, id=produto_id, comercio_id=comercio_id)
+
+    if request.method == 'POST':
+        form = ProdutoForm(request.POST, instance=produto)
+        if form.is_valid():
+            produto = form.save(commit=False)
+            produto.comercio_id = comercio_id 
+            produto.save()
+            return redirect('estoque')
+    else:
+        form = ProdutoForm(instance=produto)
+
+    return render(request, 'form_produto.html', {'form': form, 'produto': produto})
+
+def remover_produto(request, produto_id):
+    produto = get_object_or_404(Produto, id=produto_id)
+    if request.method == 'POST':
+        produto.delete()
+        return redirect('estoque')
+    return render(request, 'confirmar_remocao.html', {'produto': produto})
+

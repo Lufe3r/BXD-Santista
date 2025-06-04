@@ -128,5 +128,5 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'seu_email@gmail.com'
-EMAIL_HOST_PASSWORD = 'sua_senha_de_app_ou_email'
+EMAIL_HOST_PASSWORD = 'suix jdxv ckwf azug'
 DEFAULT_FROM_EMAIL = 'seu_email@gmail.com'
