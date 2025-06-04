@@ -1,22 +1,39 @@
-<!DOCTYPE html>
-<html>
+<html lang="pt-BR" class="scroll-smooth">
 <head>
-    <title>Login Cliente</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login Cliente</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
 </head>
-<body>
-    <h2>Login Cliente</h2>
-    <form method="post">
-        {% csrf_token %}
+<body class="bg-blue-700 min-h-screen flex items-center justify-center p-4">
+  <main class="bg-white rounded-lg shadow-lg w-full max-w-sm p-8">
+    <h2 class="text-center text-2xl font-extrabold text-gray-900 mb-8">Login Cliente</h2>
+    <form method="post" class="flex flex-col gap-6">
+      {% csrf_token %}
+      <div class="space-y-4">
         {{ form.as_p }}
-        <button type="submit">Entrar</button>
+      </div>
+      <button
+        type="submit"
+        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-md transition-colors"
+      >
+        Entrar
+      </button>
     </form>
 
     {% if messages %}
-        <ul>
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
+      <ul class="mt-6 text-sm text-red-600 list-disc list-inside space-y-2">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
     {% endif %}
+  </main>
 </body>
 </html>

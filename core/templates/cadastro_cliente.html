@@ -1,28 +1,47 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <title>Cadastro Cliente</title>
-</head>
-<body>
-    <h1>Cadastro de Cliente</h1>
-
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Cadastrar</button>
-    </form>
-
-    <p>
-        <a href="{% url 'cadastro_comercio' %}" onclick="return confirmarTroca();">
-            Clique aqui para entrar como vendedor
-        </a>
-    </p>
-
-    <script>
-    function confirmarTroca() {
-        return confirm("Você deseja realmente trocar para o cadastro de vendedor?");
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cadastro Cliente</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+  />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
     }
-    </script>
+  </style>
+</head>
+<body class="bg-[#3B82F6] min-h-screen flex items-center justify-center p-6">
+  <main class="bg-white rounded-xl max-w-3xl w-full p-8 flex flex-col md:flex-row gap-8 md:gap-12">
+    <form method="post" class="flex flex-col gap-4 w-full max-w-xs" novalidate>
+      {% csrf_token %}
+      {{ form.as_p|safe }}
+      <button
+        type="submit"
+        class="mt-4 bg-[#3B82F6] text-white font-bold rounded-lg py-2 text-[13px] hover:bg-blue-700 transition-colors"
+      >
+        Cadastrar
+      </button>
+      <p class="text-[10px] text-[#6B6B6B] mt-2">
+        <a
+          href="{% url 'cadastro_comercio' %}"
+          onclick="return confirmarTroca();"
+          class="underline hover:text-blue-600"
+        >
+          Clique aqui para entrar como vendedor
+        </a>
+      </p>
+    </form>
+  </main>
+
+  <script>
+    function confirmarTroca() {
+      return confirm("Você deseja realmente trocar para o cadastro de vendedor?");
+    }
+  </script>
 </body>
 </html>

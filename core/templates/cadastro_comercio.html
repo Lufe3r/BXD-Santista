@@ -1,27 +1,42 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <title>Cadastro Comércio</title>
+  <meta charset="UTF-8" />
+  <title>Cadastro Comércio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
 </head>
-<body>
-    <h1>Cadastro de Comércio</h1>
-<form method="post">
+<body class="bg-blue-700  min-h-screen flex flex-col items-center justify-start p-6">
+  <h1 class="text-2xl font-bold mb-6 text-gray-900">Cadastro de Comércio</h1>
+  <form method="post" class="w-full max-w-md bg-gray-50 p-6 rounded-lg shadow-md flex flex-col gap-6">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Cadastrar</button>
-</form>
+    <button
+      type="submit"
+      class="bg-blue-700 hover:bg-blue-800 text-white font-semibold py-2 rounded transition-colors duration-200"
+    >
+      Cadastrar
+    </button>
+  </form>
 
-    <p>
-        <a href="{% url 'cadastro_cliente' %}" onclick="return confirmarTroca();">
-            Clique aqui para entrar como cliente
-        </a>
-    </p>
+  <p class="mt-6 text-center text-gray-700">
+    <a
+      href="{% url 'cadastro_cliente' %}"
+      onclick="return confirmarTroca();"
+      class="text-blue-700 hover:underline font-semibold"
+    >
+      Clique aqui para entrar como cliente
+    </a>
+  </p>
 
-    <script>
+  <script>
     function confirmarTroca() {
-        return confirm("Você deseja realmente trocar para o cadastro de cliente?");
+      return confirm("Você deseja realmente trocar para o cadastro de cliente?");
     }
-    </script>
+  </script>
 </body>
 </html>
