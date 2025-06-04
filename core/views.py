@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
-from django.core.mail import send_mail
 from django.contrib import messages
 from .forms import ComercioForm, ClienteForm, LoginClienteForm, LoginComercioForm, ProdutoForm, ComercioPerfilForm
 from .models import Cliente, Comercio, Produto
 from django.conf import settings
+from django.db.models import Max
 
 
 
@@ -125,8 +125,9 @@ def estoque(request):
     if not comercio_id:
         return redirect('login_comercio')
 
-    produtos = Produto.objects.filter(comercio_id=comercio_id)
+    produtos = Produto.objects.filter(comercio_id=comercio_id).order_by('numero_local')
     return render(request, 'estoque.html', {'produtos': produtos})
+
 
 def adicionar_produto(request):
     comercio_id = request.session.get('comercio_id')
@@ -134,11 +135,19 @@ def adicionar_produto(request):
         return redirect('login_comercio')
 
     if request.method == 'POST':
-        form = ProdutoForm(request.POST, request.FILES)  # <- Adicione isso aqui
+        form = ProdutoForm(request.POST, request.FILES)
         if form.is_valid():
             produto = form.save(commit=False)
             produto.comercio_id = comercio_id
-            produto.save() 
+
+            # Pega o maior numero_local atual daquele comércio
+            ultimo_numero = Produto.objects.filter(comercio_id=comercio_id).aggregate(
+                Max('numero_local')
+            )['numero_local__max'] or 0
+
+            produto.numero_local = ultimo_numero + 1
+            produto.save()
+
             return redirect('estoque')
     else:
         form = ProdutoForm()

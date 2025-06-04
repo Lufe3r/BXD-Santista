@@ -71,6 +71,7 @@ class Produto(models.Model):
     preco = models.DecimalField(max_digits=10, decimal_places=2)
     catalogo = models.CharField(max_length=100)
     imagem = models.ImageField(upload_to='produtos/', null=True, blank=True)
+    numero_local = models.PositiveIntegerField(default=0) 
 
     estoque = models.PositiveIntegerField(default=0)
     vendidos = models.PositiveIntegerField(default=0)
