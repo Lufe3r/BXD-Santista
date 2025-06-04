@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.core.mail import send_mail
 from django.contrib import messages
-from .forms import ComercioForm, ClienteForm, LoginClienteForm, LoginComercioForm, ProdutoForm
+from .forms import ComercioForm, ClienteForm, LoginClienteForm, LoginComercioForm, ProdutoForm, ComercioPerfilForm
 from .models import Cliente, Comercio, Produto
 from django.conf import settings
 
@@ -88,13 +88,32 @@ def home_cliente(request):
     return render(request, 'home_cliente.html')
 
 def home_comercio(request):
-    return render(request, 'home_comercio.html')
+    produto_mais_vendido = Produto.objects.order_by('-vendidos').first()
+    produtos_em_falta = Produto.objects.filter(estoque=0)
+
+    context = {
+        'produto_mais_vendido': produto_mais_vendido,
+        'produtos_em_falta': produtos_em_falta,
+    }
+
+    return render(request, 'home_comercio.html', context)
 
 def home(request):
     return render(request, 'home.html')
 
 def perfil_comercio(request):
-    return render(request, 'perfil_comercio.html')
+    comercio_id = request.session.get('comercio_id')
+    comercio_obj = Comercio.objects.get(id=comercio_id)
+
+    if request.method == 'POST':
+        form = ComercioPerfilForm(request.POST, instance=comercio_obj)
+        if form.is_valid():
+            form.save()
+            return redirect('perfil_comercio')
+    else:
+        form = ComercioPerfilForm(instance=comercio_obj)
+
+    return render(request, 'perfil_comercio.html', {'form': form})
 
 def estoque(request):
     comercio_id = request.session.get('comercio_id')

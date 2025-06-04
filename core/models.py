@@ -14,6 +14,26 @@ class Cliente(models.Model):
 
     def __str__(self):
         return self.nome
+    
+TIPOS_COMERCIO = [
+    ('Mecanico', 'Mecânico'),
+    ('Chaveiro', 'Chaveiro'),
+    ('Acougue', 'Açougue'),
+    ('Brecho', 'Brechó'),
+    ('Marcenaria', 'Marcenaria'),
+    ('Bijuteria', 'Bijuteria'),
+    ('Pedicure', 'Pedicure'),
+    ('Manicure', 'Manicure'),
+    ('Cabeleireiro', 'Cabeleireiro'),
+    ('Dentista', 'Dentista'),
+    ('Restaurante', 'Restaurante'),
+    ('Mercado', 'Mercado'),
+    ('Papelaria', 'Papelaria'),
+    ('Farmacia', 'Farmácia'),
+    ('Livraria', 'Livraria'),
+    ('Barbeiro', 'Barbeiro'),
+    ('Outros', 'Outros'),
+]
 
 class Comercio(models.Model):
     nome = models.CharField(max_length=100)
@@ -21,6 +41,17 @@ class Comercio(models.Model):
     estabelecimento = models.CharField(max_length=100)
     cnpj = models.CharField(max_length=20, unique=True)
     senha = models.CharField(max_length=100)
+
+    descricao = models.TextField(blank=True)
+    tipo_comercio = models.CharField(
+    max_length=50,
+    choices=TIPOS_COMERCIO,
+    default='Outros'
+    )
+    
+    horario_funcionamento = models.CharField(max_length=100, blank=True)
+    formas_pagamento = models.CharField(max_length=255, blank=True)
+    endereco = models.CharField(max_length=255, blank=True)
 
     def set_senha(self, raw_password):
         self.senha = make_password(raw_password)
@@ -38,6 +69,9 @@ class Produto(models.Model):
     estoque = models.PositiveIntegerField()
     preco = models.DecimalField(max_digits=10, decimal_places=2)
     catalogo = models.CharField(max_length=100)
+
+    estoque = models.PositiveIntegerField(default=0)
+    vendidos = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.nome

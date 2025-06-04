@@ -6,9 +6,32 @@
 </head>
 <body>
     <h1>Bem-vindo, Vendedor!</h1>
+    <a href="{% url 'home_comercio' %}">pagina inicial</a>
     <a href="{% url 'perfil_comercio' %}">perfil</a>
     <a href="{% url 'estoque' %}">Estoque</a>
     <br></br>
+    <div>
+  <h3>Produto mais vendido</h3>
+  {% if produto_mais_vendido %}
+    <p>{{ produto_mais_vendido.nome }} - {{ produto_mais_vendido.vendidos }} vendidos</p>
+  {% else %}
+    <p>Nenhum produto vendido ainda.</p>
+  {% endif %}
+</div>
+
+<!-- Em falta no estoque -->
+<div>
+  <h3>Produtos em falta no estoque</h3>
+  {% if produtos_em_falta %}
+    <ul>
+      {% for produto in produtos_em_falta %}
+        <li>{{ produto.nome }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Todos os produtos estão disponíveis no estoque.</p>
+  {% endif %}
+</div>
     <a href="{% url 'home' %}">Volte a pagina inicial</a>
 </body>
 </html>

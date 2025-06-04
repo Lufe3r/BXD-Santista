@@ -1,5 +1,5 @@
 from django import forms
-from .models import Cliente, Comercio, Produto
+from .models import Cliente, Comercio, Produto, TIPOS_COMERCIO
 
 class ClienteForm(forms.ModelForm):
     senha = forms.CharField(widget=forms.PasswordInput)
@@ -47,3 +47,12 @@ class ProdutoForm(forms.ModelForm):
     class Meta:
         model = Produto
         fields = ['nome', 'categoria', 'estoque', 'preco', 'catalogo']
+
+class ComercioPerfilForm(forms.ModelForm):
+    class Meta:
+        model = Comercio
+        fields = ['nome', 'descricao', 'tipo_comercio', 'horario_funcionamento', 'formas_pagamento', 'endereco']
+        widgets = {
+            'tipo_comercio': forms.Select(choices=TIPOS_COMERCIO),
+            'descricao': forms.Textarea(attrs={'rows': 3}),
+        }

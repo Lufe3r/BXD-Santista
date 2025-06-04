@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="{% url 'home_comercio' %}">pagina inicial</a>
+    <a href="{% url 'perfil_comercio' %}">perfil</a>
+    <a href="{% url 'estoque' %}">Estoque</a>
+        {% block content %}
+        <h2>Perfil do Comércio</h2>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Salvar alterações</button>
+        </form>
+
+        {% endblock %}
+    <br></br>
+    <a href="{% url 'home' %}">Volte a pagina inicial</a>
+</body>
+</html>
