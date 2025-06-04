@@ -5,6 +5,12 @@ class Cliente(models.Model):
     nome = models.CharField(max_length=150, unique=True)
     email = models.EmailField(unique=True)
     senha = models.CharField(max_length=128)
+    favoritos = models.ManyToManyField('Comercio', related_name='clientes_favoritaram', blank=True)
+    telefone = models.CharField(max_length=20, blank=True)
+    idade = models.PositiveIntegerField(null=True, blank=True)
+    genero = models.CharField(max_length=20, blank=True)
+    imagem_perfil = models.ImageField(upload_to='clientes/', blank=True, null=True)
+
 
     def set_senha(self, raw_password):
         self.senha = make_password(raw_password)

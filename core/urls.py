@@ -17,7 +17,13 @@ urlpatterns = [
     path('estoque/adicionar/', views.adicionar_produto, name='adicionar_produto'),
     path('estoque/editar/<int:produto_id>/', views.editar_produto, name='editar_produto'),
     path('estoque/remover/<int:produto_id>/', views.remover_produto, name='remover_produto'),
-    path('perfil/comercio', views.perfil_comercio, name='perfil_comercio'),
+    path('perfil/cliente',views.perfil_cliente, name='perfil_cliente'),
+    path('comentarios/cliente',views.comentario_cliente, name='comentario_cliente'),
+    path('estabelecimento/favoritados',views.estabelecimento_favoritados, name='estabelecimento_favoritados'),
+    path('buscar/', views.buscar_comercios, name='buscar_comercios'),
+    path('comercio/<int:comercio_id>/', views.perfil_comercio_publico, name='perfil_comercio_publico'),
+    path('comercio/<int:comercio_id>/catalogo/', views.ver_catalogo, name='ver_catalogo'),
+    path('comercio/<int:comercio_id>/favoritar/', views.favoritar_comercio, name='favoritar_comercio'),
 ]
 
 if settings.DEBUG:

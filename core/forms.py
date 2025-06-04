@@ -57,3 +57,10 @@ class ComercioPerfilForm(forms.ModelForm):
             'descricao': forms.Textarea(attrs={'rows': 3}),
         }
 
+
+class ClientePerfilForm(forms.ModelForm):
+    class Meta:
+        model = Cliente
+        fields = ['nome', 'telefone', 'email', 'idade', 'genero', 'imagem_perfil']
+
+
