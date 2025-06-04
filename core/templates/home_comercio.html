@@ -9,8 +9,8 @@
     <a href="{% url 'home_comercio' %}">pagina inicial</a>
     <a href="{% url 'perfil_comercio' %}">perfil</a>
     <a href="{% url 'estoque' %}">Estoque</a>
-    <a href="{% url 'comercio_codigo_compra' %}">Estoque</a>
-    <a href="{% url 'feedback_produtos' %}">Estoque</a>
+    <a href="{% url 'comercio_codigo_compra' %}">Compras em andamento</a>
+    <a href="{% url 'feedback_produtos' %}">Analises dos seus produtos</a>
     <br></br>
     <div>
   <h3>Produto mais vendido</h3>
@@ -24,6 +24,7 @@
 {% endif %}
 
 <!-- Em falta no estoque -->
+ <h3>Faltando no estoque</h3>
 {% for produto in produtos_em_falta %}
     <li>
         {{ produto.nome }}

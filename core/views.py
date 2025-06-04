@@ -2,12 +2,17 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
-from .forms import ComercioForm, ClienteForm, LoginClienteForm, LoginComercioForm, ProdutoForm, ComercioPerfilForm
-from .models import Cliente, Comercio, Produto
+from .forms import ComercioForm, ClienteForm, LoginClienteForm, LoginComercioForm, ProdutoForm, ComercioPerfilForm, ClientePerfilForm
+from .models import Cliente, Comercio, Produto, TIPOS_COMERCIO
 from django.conf import settings
 from django.db.models import Max
 
 
+def home(request):
+    return render(request, 'home.html')
+
+def escolha(request):
+    return render(request, 'escolha.html')
 
 def cadastro_cliente(request):
     if request.method == 'POST':
@@ -22,20 +27,6 @@ def cadastro_cliente(request):
         form = ClienteForm()
 
     return render(request, 'cadastro_cliente.html', {'form': form})
-
-
-def cadastro_comercio(request):
-    if request.method == 'POST':
-        form = ComercioForm(request.POST)
-        if form.is_valid():
-            comercio = form.save(commit=False) 
-            senha = form.cleaned_data['senha']
-            comercio.set_senha(senha)          
-            comercio.save()                     
-            return redirect('login_comercio')
-    else:
-        form = ComercioForm()
-    return render(request, 'cadastro_comercio.html', {'form': form})
 
 def login_cliente(request):
     if request.method == 'POST':
@@ -57,6 +48,102 @@ def login_cliente(request):
         form = LoginClienteForm()
 
     return render(request, 'login_cliente.html', {'form': form})
+
+
+def home_cliente(request):
+    return render(request, 'home_cliente.html')
+
+def perfil_cliente(request):
+    cliente_id = request.session.get('cliente_id')
+    if not cliente_id:
+        return redirect('login_cliente')
+
+    cliente_obj = Cliente.objects.get(id=cliente_id)
+
+    if request.method == 'POST':
+        form = ClientePerfilForm(request.POST, request.FILES, instance=cliente_obj)
+        if form.is_valid():
+            form.save()
+            return redirect('perfil_cliente')
+    else:
+        form = ClientePerfilForm(instance=cliente_obj)
+
+    return render(request, 'perfil_cliente.html', {'form': form})
+
+def estabelecimento_favoritados(request):
+    cliente_id = request.session.get('cliente_id')
+    if not cliente_id:
+        return redirect('login_cliente')
+
+    cliente = Cliente.objects.get(id=cliente_id)
+    favoritos = cliente.favoritos.all()
+
+    return render(request, 'estabelecimento_favoritados.html', {'favoritos': favoritos})
+
+def comentario_cliente(request):
+    return render(request, 'comentario_cliente.html')
+
+def buscar_comercios(request):
+    tipo_selecionado = request.GET.get('tipo')  # Pega o tipo selecionado na URL
+    if tipo_selecionado:
+        comercios = Comercio.objects.filter(tipo_comercio=tipo_selecionado)
+    else:
+        comercios = Comercio.objects.all()
+
+    return render(request, 'buscar_comercios.html', {
+        'comercios': comercios,
+        'tipos': TIPOS_COMERCIO,
+        'tipo_selecionado': tipo_selecionado,
+    })
+
+def perfil_comercio_publico(request, comercio_id):
+    comercio = get_object_or_404(Comercio, id=comercio_id)
+    cliente_id = request.session.get('cliente_id')
+    cliente = Cliente.objects.get(id=cliente_id) if cliente_id else None
+
+    return render(request, 'perfil_comercio_publico.html', {
+        'comercio': comercio,
+        'cliente': cliente,
+    })
+
+def ver_catalogo(request, comercio_id):
+    comercio = Comercio.objects.get(id=comercio_id)
+    produtos = Produto.objects.filter(comercio=comercio)
+
+    return render(request, 'catalogo_publico.html', {
+        'comercio': comercio,
+        'produtos': produtos
+    })
+
+def favoritar_comercio(request, comercio_id):
+    cliente_id = request.session.get('cliente_id')
+    if not cliente_id:
+        return redirect('login_cliente')  # ou redirecione conforme sua lógica de autenticação
+
+    cliente = get_object_or_404(Cliente, id=cliente_id)
+    comercio = get_object_or_404(Comercio, id=comercio_id)
+
+    if comercio in cliente.favoritos.all():
+        cliente.favoritos.remove(comercio)
+    else:
+        cliente.favoritos.add(comercio)
+
+    return redirect('perfil_comercio_publico', comercio_id=comercio.id)
+
+#PARTE DO COMERCIO
+
+def cadastro_comercio(request):
+    if request.method == 'POST':
+        form = ComercioForm(request.POST)
+        if form.is_valid():
+            comercio = form.save(commit=False) 
+            senha = form.cleaned_data['senha']
+            comercio.set_senha(senha)          
+            comercio.save()                     
+            return redirect('login_comercio')
+    else:
+        form = ComercioForm()
+    return render(request, 'cadastro_comercio.html', {'form': form})
 
 def login_comercio(request):
     if request.method == 'POST':
@@ -81,12 +168,6 @@ def login_comercio(request):
 
     return render(request, 'login_comercio.html', {'form': form})
 
-def escolha(request):
-    return render(request, 'escolha.html')
-
-def home_cliente(request):
-    return render(request, 'home_cliente.html')
-
 def home_comercio(request):
     comercio_id = request.session.get('comercio_id')
     if not comercio_id:
@@ -101,9 +182,6 @@ def home_comercio(request):
     }
 
     return render(request, 'home_comercio.html', context)
-
-def home(request):
-    return render(request, 'home.html')
 
 def perfil_comercio(request):
     comercio_id = request.session.get('comercio_id')
@@ -179,3 +257,9 @@ def remover_produto(request, produto_id):
         return redirect('estoque')
     return render(request, 'confirmar_remocao.html', {'produto': produto})
 
+def comercio_codigo_compra(request):
+    return render(request, 'comercio_codigo_compra.html')
+
+
+def feedback_produtos(request):
+    return render(request, 'feedback_produtos.html')
