@@ -88,8 +88,12 @@ def home_cliente(request):
     return render(request, 'home_cliente.html')
 
 def home_comercio(request):
-    produto_mais_vendido = Produto.objects.order_by('-vendidos').first()
-    produtos_em_falta = Produto.objects.filter(estoque=0)
+    comercio_id = request.session.get('comercio_id')
+    if not comercio_id:
+        return redirect('login_comercio')
+
+    produto_mais_vendido = Produto.objects.filter(comercio_id=comercio_id).order_by('-vendidos').first()
+    produtos_em_falta = Produto.objects.filter(comercio_id=comercio_id, estoque=0)
 
     context = {
         'produto_mais_vendido': produto_mais_vendido,
@@ -106,7 +110,7 @@ def perfil_comercio(request):
     comercio_obj = Comercio.objects.get(id=comercio_id)
 
     if request.method == 'POST':
-        form = ComercioPerfilForm(request.POST, instance=comercio_obj)
+        form = ComercioPerfilForm(request.POST, request.FILES, instance=comercio_obj)  # <- Aqui também
         if form.is_valid():
             form.save()
             return redirect('perfil_comercio')
@@ -114,6 +118,7 @@ def perfil_comercio(request):
         form = ComercioPerfilForm(instance=comercio_obj)
 
     return render(request, 'perfil_comercio.html', {'form': form})
+
 
 def estoque(request):
     comercio_id = request.session.get('comercio_id')
@@ -129,7 +134,7 @@ def adicionar_produto(request):
         return redirect('login_comercio')
 
     if request.method == 'POST':
-        form = ProdutoForm(request.POST)
+        form = ProdutoForm(request.POST, request.FILES)  # <- Adicione isso aqui
         if form.is_valid():
             produto = form.save(commit=False)
             produto.comercio_id = comercio_id
@@ -147,7 +152,7 @@ def editar_produto(request, produto_id):
     produto = get_object_or_404(Produto, id=produto_id, comercio_id=comercio_id)
 
     if request.method == 'POST':
-        form = ProdutoForm(request.POST, instance=produto)
+        form = ProdutoForm(request.POST, request.FILES, instance=produto)  # <- Adicione isso aqui
         if form.is_valid():
             produto = form.save(commit=False)
             produto.comercio_id = comercio_id 

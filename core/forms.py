@@ -46,13 +46,14 @@ class LoginClienteForm(forms.Form):
 class ProdutoForm(forms.ModelForm):
     class Meta:
         model = Produto
-        fields = ['nome', 'categoria', 'estoque', 'preco', 'catalogo']
+        fields = ['nome', 'categoria', 'estoque', 'preco', 'catalogo', 'imagem']
 
 class ComercioPerfilForm(forms.ModelForm):
     class Meta:
         model = Comercio
-        fields = ['nome', 'descricao', 'tipo_comercio', 'horario_funcionamento', 'formas_pagamento', 'endereco']
+        fields = ['nome', 'descricao', 'tipo_comercio', 'horario_funcionamento', 'formas_pagamento', 'endereco', 'imagem']
         widgets = {
             'tipo_comercio': forms.Select(choices=TIPOS_COMERCIO),
             'descricao': forms.Textarea(attrs={'rows': 3}),
         }
+

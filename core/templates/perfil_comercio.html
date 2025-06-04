@@ -12,9 +12,13 @@
         {% block content %}
         <h2>Perfil do Comércio</h2>
 
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
+            {% if form.imagem_estabelecimento %}
+                <p>Imagem atual:</p>
+                <img src="{{ form.instance.imagem_estabelecimento.url }}" height="150" alt="Imagem do Estabelecimento">
+            {% endif %}
             <button type="submit">Salvar alterações</button>
         </form>
 

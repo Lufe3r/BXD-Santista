@@ -41,6 +41,7 @@ class Comercio(models.Model):
     estabelecimento = models.CharField(max_length=100)
     cnpj = models.CharField(max_length=20, unique=True)
     senha = models.CharField(max_length=100)
+    imagem = models.ImageField(upload_to='produtos/', blank=True, null=True)
 
     descricao = models.TextField(blank=True)
     tipo_comercio = models.CharField(
@@ -69,6 +70,7 @@ class Produto(models.Model):
     estoque = models.PositiveIntegerField()
     preco = models.DecimalField(max_digits=10, decimal_places=2)
     catalogo = models.CharField(max_length=100)
+    imagem = models.ImageField(upload_to='produtos/', null=True, blank=True)
 
     estoque = models.PositiveIntegerField(default=0)
     vendidos = models.PositiveIntegerField(default=0)

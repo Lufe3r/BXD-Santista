@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views  # ou outro app que tenha a view
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -17,5 +19,8 @@ urlpatterns = [
     path('estoque/remover/<int:produto_id>/', views.remover_produto, name='remover_produto'),
     path('perfil/comercio', views.perfil_comercio, name='perfil_comercio'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 #path('',views., name=''),

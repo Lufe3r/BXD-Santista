@@ -12,26 +12,25 @@
     <br></br>
     <div>
   <h3>Produto mais vendido</h3>
-  {% if produto_mais_vendido %}
+{% if produto_mais_vendido %}
     <p>{{ produto_mais_vendido.nome }} - {{ produto_mais_vendido.vendidos }} vendidos</p>
-  {% else %}
+    {% if produto_mais_vendido.imagem %}
+        <img src="{{ produto_mais_vendido.imagem.url }}" height="100">
+    {% endif %}
+{% else %}
     <p>Nenhum produto vendido ainda.</p>
-  {% endif %}
-</div>
+{% endif %}
 
 <!-- Em falta no estoque -->
-<div>
-  <h3>Produtos em falta no estoque</h3>
-  {% if produtos_em_falta %}
-    <ul>
-      {% for produto in produtos_em_falta %}
-        <li>{{ produto.nome }}</li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>Todos os produtos estão disponíveis no estoque.</p>
-  {% endif %}
-</div>
+{% for produto in produtos_em_falta %}
+    <li>
+        {{ produto.nome }}
+        {% if produto.imagem %}
+            <br>
+            <img src="{{ produto.imagem.url }}" height="80">
+        {% endif %}
+    </li>
+{% endfor %}
     <a href="{% url 'home' %}">Volte a pagina inicial</a>
 </body>
 </html>
