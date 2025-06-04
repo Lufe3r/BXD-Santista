@@ -1,42 +1,92 @@
 <html lang="pt-br" class="scroll-smooth">
-<head>
-  <meta charset="UTF-8" />
-  <title>Cadastro Comércio</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
-    body {
-      font-family: 'Inter', sans-serif;
-    }
-  </style>
-</head>
-<body class="bg-blue-700  min-h-screen flex flex-col items-center justify-start p-6">
-  <h1 class="text-2xl font-bold mb-6 text-gray-900">Cadastro de Comércio</h1>
-  <form method="post" class="w-full max-w-md bg-gray-50 p-6 rounded-lg shadow-md flex flex-col gap-6">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button
-      type="submit"
-      class="bg-blue-700 hover:bg-blue-800 text-white font-semibold py-2 rounded transition-colors duration-200"
-    >
-      Cadastrar
-    </button>
-  </form>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Cadastro Comércio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+    </style>
+  </head>
+  <body class="bg-[#2076BA] min-h-screen flex items-center justify-center p-6">
+    <div class="bg-white rounded-lg max-w-4xl w-full flex flex-col md:flex-row p-8 gap-8">
+      <!-- Form inputs on the left -->
+      <form method="post" class="flex flex-col gap-6 w-full max-w-xs">
+        {% csrf_token %}
+        <label class="flex flex-col text-[13px] font-semibold text-black">
+          Nome
+          <input
+            type="text"
+            name="nome"
+            placeholder="Insira seu nome"
+            class="mt-1 rounded-lg bg-[#D9D9D9] placeholder:text-[#7F7F7F] text-[13px] px-3 py-2 outline-none"
+          />
+        </label>
+        <label class="flex flex-col text-[13px] font-semibold text-black">
+          Email
+          <input
+            type="email"
+            name="email"
+            placeholder="Insira seu email"
+            class="mt-1 rounded-lg bg-[#D9D9D9] placeholder:text-[#7F7F7F] text-[13px] px-3 py-2 outline-none"
+          />
+        </label>
+        <label class="flex flex-col text-[13px] font-semibold text-black">
+          Estabelecimento
+          <input
+            type="text"
+            name="estabelecimento"
+            placeholder="Insira o nome do estabelecimento"
+            class="mt-1 rounded-lg bg-[#D9D9D9] placeholder:text-[#7F7F7F] text-[13px] px-3 py-2 outline-none"
+          />
+        </label>
+        <label class="flex flex-col text-[13px] font-semibold text-black">
+          CNPJ
+          <input
+            type="text"
+            name="cnpj"
+            placeholder="Insira seu CNPJ"
+            class="mt-1 rounded-lg bg-[#D9D9D9] placeholder:text-[#7F7F7F] text-[13px] px-3 py-2 outline-none"
+          />
+        </label>
+      </form>
 
-  <p class="mt-6 text-center text-gray-700">
-    <a
-      href="{% url 'cadastro_cliente' %}"
-      onclick="return confirmarTroca();"
-      class="text-blue-700 hover:underline font-semibold"
-    >
-      Clique aqui para entrar como cliente
-    </a>
-  </p>
-
-  <script>
-    function confirmarTroca() {
-      return confirm("Você deseja realmente trocar para o cadastro de cliente?");
-    }
-  </script>
-</body>
+      <!-- Text and button on the right -->
+      <div class="flex flex-col max-w-md w-full text-[13px] font-extrabold text-[#1A1A1A] justify-between">
+        <div>
+          <h2 class="font-extrabold text-[30px] mb-4 leading-tight">
+            Vamos juntos transformar <br />sua gestão?
+          </h2>
+          <p class="mb-4 leading-relaxed">
+            📦📚 <span class="font-extrabold">Mais controle, mais clientes, mais crescimento!</span>
+          </p>
+          <p class="mb-4 leading-relaxed">
+            Seja você um comerciante querendo organizar seu estoque ou um cliente em busca dos melhores serviços, aqui é o lugar certo! 🤚
+          </p>
+          <p class="mb-4 leading-relaxed">✅ Gerencie seus produtos e serviços com facilidade.</p>
+          <p class="mb-4 leading-relaxed">✅ Conecte-se com clientes e aumente suas vendas.</p>
+          <p class="mb-4 leading-relaxed">✅ Encontre exatamente o que precisa, sem complicação!</p>
+          <p class="mb-4 leading-relaxed">📦 Cadastre-se agora e faça parte dessa revolução! 🚀</p>
+        </div>
+        <button
+          type="submit"
+          form="formCadastro"
+          aria-label="Enviar cadastro"
+          class="self-end w-12 h-12 rounded-full bg-[#D9D9D9] flex items-center justify-center mt-6"
+        >
+          <svg
+            class="w-6 h-6 text-[#0B3D91]"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M3 12l18-9v18L3 12z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </body>
 </html>
