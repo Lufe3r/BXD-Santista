@@ -24,6 +24,8 @@ urlpatterns = [
     path('comercio/<int:comercio_id>/', views.perfil_comercio_publico, name='perfil_comercio_publico'),
     path('comercio/<int:comercio_id>/catalogo/', views.ver_catalogo, name='ver_catalogo'),
     path('comercio/<int:comercio_id>/favoritar/', views.favoritar_comercio, name='favoritar_comercio'),
+    path('comercio/codigo/compra',views.comercio_codigo_compra, name='comercio_codigo_compra'),
+    path('feedback/produtos',views.feedback_produtos, name='feedback_produtos'),
 ]
 
 if settings.DEBUG:

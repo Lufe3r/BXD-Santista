@@ -257,3 +257,9 @@ def remover_produto(request, produto_id):
         return redirect('estoque')
     return render(request, 'confirmar_remocao.html', {'produto': produto})
 
+def comercio_codigo_compra(request):
+    return render(request, 'comercio_codigo_compra.html')
+
+
+def feedback_produtos(request):
+    return render(request, 'feedback_produtos.html')
