@@ -5,6 +5,12 @@ class Cliente(models.Model):
     nome = models.CharField(max_length=150, unique=True)
     email = models.EmailField(unique=True)
     senha = models.CharField(max_length=128)
+    favoritos = models.ManyToManyField('Comercio', related_name='clientes_favoritaram', blank=True)
+    telefone = models.CharField(max_length=20, blank=True)
+    idade = models.PositiveIntegerField(null=True, blank=True)
+    genero = models.CharField(max_length=20, blank=True)
+    imagem_perfil = models.ImageField(upload_to='clientes/', blank=True, null=True)
+
 
     def set_senha(self, raw_password):
         self.senha = make_password(raw_password)
@@ -41,6 +47,7 @@ class Comercio(models.Model):
     estabelecimento = models.CharField(max_length=100)
     cnpj = models.CharField(max_length=20, unique=True)
     senha = models.CharField(max_length=100)
+    imagem = models.ImageField(upload_to='produtos/', blank=True, null=True)
 
     descricao = models.TextField(blank=True)
     tipo_comercio = models.CharField(
@@ -69,6 +76,8 @@ class Produto(models.Model):
     estoque = models.PositiveIntegerField()
     preco = models.DecimalField(max_digits=10, decimal_places=2)
     catalogo = models.CharField(max_length=100)
+    imagem = models.ImageField(upload_to='produtos/', null=True, blank=True)
+    numero_local = models.PositiveIntegerField(default=0) 
 
     estoque = models.PositiveIntegerField(default=0)
     vendidos = models.PositiveIntegerField(default=0)

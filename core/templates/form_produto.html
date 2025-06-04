@@ -6,11 +6,15 @@
 <body>
     <h1>{% if form.instance.pk %}Editar Produto{% else %}Adicionar Produto{% endif %}</h1>
 
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Salvar</button>
-    </form>
+        {% if form.instance.imagem %}
+            <p>Imagem atual:</p>
+            <img src="{{ form.instance.imagem.url }}" height="150" alt="Imagem do Produto">
+        {% endif %}
+    <button type="submit">Salvar</button>
+</form>
 
     <a href="{% url 'estoque' %}">Voltar para estoque</a>
 </body>
