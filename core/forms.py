@@ -17,6 +17,9 @@ class ClienteForm(forms.ModelForm):
         if senha != confirma:
             raise forms.ValidationError("As senhas não coincidem.")
         return cleaned_data
+    
+def limpa_cnpj(cnpj):
+    return ''.join(filter(str.isdigit, cnpj))
 
 class ComercioForm(forms.ModelForm):
     senha = forms.CharField(widget=forms.PasswordInput)
@@ -24,14 +27,14 @@ class ComercioForm(forms.ModelForm):
 
     class Meta:
         model = Comercio
-        fields = ['nome', 'email', 'estabelecimento', 'cnpj', 'senha']
+        fields = ['nome', 'email', 'estabelecimento', 'cnpj', 'senha', 'confirma_senha']  # <- isso é essencial
 
     def clean(self):
         cleaned_data = super().clean()
         senha = cleaned_data.get("senha")
         confirma = cleaned_data.get("confirma_senha")
 
-        if senha != confirma:
+        if senha and confirma and senha != confirma:
             raise forms.ValidationError("As senhas não coincidem.")
         return cleaned_data
   

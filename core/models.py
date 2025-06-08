@@ -1,7 +1,9 @@
 from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.models import User
 
 class Cliente(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     nome = models.CharField(max_length=150, unique=True)
     email = models.EmailField(unique=True)
     senha = models.CharField(max_length=128)
@@ -20,7 +22,20 @@ class Cliente(models.Model):
 
     def __str__(self):
         return self.nome
-    
+
+
+class CompraFinalizada(models.Model):
+    codigo = models.CharField(max_length=5, unique=True)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    comercio = models.ForeignKey('Comercio', on_delete=models.CASCADE)
+    produtos = models.JSONField()
+    total = models.DecimalField(max_digits=10, decimal_places=2)
+    data = models.DateTimeField(auto_now_add=True)
+    entregue = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'Compra {self.codigo} - {self.usuario}'
+
 TIPOS_COMERCIO = [
     ('Mecanico', 'Mecânico'),
     ('Chaveiro', 'Chaveiro'),
@@ -42,6 +57,8 @@ TIPOS_COMERCIO = [
 ]
 
 class Comercio(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)  # ADICIONE ISSO
+
     nome = models.CharField(max_length=100)
     email = models.EmailField()
     estabelecimento = models.CharField(max_length=100)
@@ -51,11 +68,10 @@ class Comercio(models.Model):
 
     descricao = models.TextField(blank=True)
     tipo_comercio = models.CharField(
-    max_length=50,
-    choices=TIPOS_COMERCIO,
-    default='Outros'
+        max_length=50,
+        choices=TIPOS_COMERCIO,
+        default='Outros'
     )
-    
     horario_funcionamento = models.CharField(max_length=100, blank=True)
     formas_pagamento = models.CharField(max_length=255, blank=True)
     endereco = models.CharField(max_length=255, blank=True)

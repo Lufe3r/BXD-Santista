@@ -20,12 +20,19 @@ urlpatterns = [
     path('perfil/cliente',views.perfil_cliente, name='perfil_cliente'),
     path('comentarios/cliente',views.comentario_cliente, name='comentario_cliente'),
     path('estabelecimento/favoritados',views.estabelecimento_favoritados, name='estabelecimento_favoritados'),
-    path('buscar/', views.buscar_comercios, name='buscar_comercios'),
+    path('buscar', views.buscar_comercios, name='buscar_comercios'),
     path('comercio/<int:comercio_id>/', views.perfil_comercio_publico, name='perfil_comercio_publico'),
     path('comercio/<int:comercio_id>/catalogo/', views.ver_catalogo, name='ver_catalogo'),
     path('comercio/<int:comercio_id>/favoritar/', views.favoritar_comercio, name='favoritar_comercio'),
     path('comercio/codigo/compra',views.comercio_codigo_compra, name='comercio_codigo_compra'),
     path('feedback/produtos',views.feedback_produtos, name='feedback_produtos'),
+    path('carrinho/',views.carrinho, name='carrinho'),
+    path('adicionar-ao-carrinho/<int:produto_id>/', views.adicionar_ao_carrinho, name='adicionar_ao_carrinho'),
+    path('finalizar-compra/', views.finalizar_compra, name='finalizar_compra'),
+    path('cancelar-pedido/', views.cancelar_pedido, name='cancelar_pedido'),
+    path('finalizar-compra/', views.finalizar_compra, name='finalizar_compra'),
+    path('compra/<str:codigo>/compra', views.comercio_codigo_compra, name='comercio_codigo_compra'),
+    path('compra/<str:codigo>/entregue/', views.marcar_entregue, name='marcar_entregue')
 ]
 
 if settings.DEBUG:

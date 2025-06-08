@@ -9,7 +9,11 @@
     <a href="{% url 'home_comercio' %}">pagina inicial</a>
     <a href="{% url 'perfil_comercio' %}">perfil</a>
     <a href="{% url 'estoque' %}">Estoque</a>
-    <a href="{% url 'comercio_codigo_compra' %}">Compras em andamento</a>
+    {% if compra %}
+    <a href="{% url 'comercio_codigo_compra' codigo=compra.codigo %}">Compras em andamento</a>
+    {% else %}
+        <p>Sem compras em andamento.</p>
+    {% endif %}
     <a href="{% url 'feedback_produtos' %}">Analises dos seus produtos</a>
         {% block content %}
         <h2>Perfil do Comércio</h2>

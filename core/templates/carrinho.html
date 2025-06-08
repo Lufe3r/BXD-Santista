@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Seu Carrinho</h2>
+    <a href="{% url 'home_cliente' %}">Pagina inicial</a>
+    <a href="{% url 'buscar_comercios' %}">Buscar comércios</a>
+    <br>
+    <a href="{% url 'perfil_cliente' %}">Perfil</a>
+    <br>
+    <a href="{% url 'comentario_cliente' %}">Comentários</a>
+    <br>
+    <a href="{% url 'estabelecimento_favoritados' %}">Lojas favoritas</a>
+    <br>
+    <a href="{% url 'carrinho' %}">
+        <button>Ver Carrinho de Compras</button>
+    </a>
+
+{% if produtos %}
+    <ul>
+  {% for item in produtos %}
+    {% if item.produto and item.subtotal %}
+      <li>{{ item.produto.nome }} - R$ {{ item.subtotal }}</li>
+    {% endif %}
+  {% endfor %}
+</ul>
+
+    <p><strong>Total:</strong> R$ {{ total }}</p>
+
+    <form method="post" action="{% url 'finalizar_compra' %}">
+        {% csrf_token %}
+        <label>Escolha a forma de pagamento:</label><br>
+        <input type="radio" name="pagamento" value="local" required> Pagar no local<br>
+        <input type="radio" name="pagamento" value="casa"> Pagar em casa<br><br>
+        <button type="submit">Finalizar compra</button>
+    </form>
+
+    <form method="post" action="{% url 'cancelar_pedido' %}">
+        {% csrf_token %}
+        <button type="submit" style="color: red;">Cancelar Pedido</button>
+    </form>
+
+{% else %}
+    <p>Seu carrinho está vazio.</p>
+{% endif %}
+
+<a href="{% url 'buscar_comercios' %}">Voltar a buscar comércios</a>
+
+</form>
+</body>
+</html>

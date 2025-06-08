@@ -11,13 +11,25 @@
     {{ form.as_p }}
     <button type="submit">Cadastrar</button>
 </form>
+{% if form.errors %}
+    <ul>
+        {% for field in form %}
+            {% for error in field.errors %}
+                <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+            {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+            <li><strong>Erro:</strong> {{ error }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
 
     <p>
         <a href="{% url 'cadastro_cliente' %}" onclick="return confirmarTroca();">
             Clique aqui para entrar como cliente
         </a>
     </p>
-
+    
     <script>
     function confirmarTroca() {
         return confirm("Você deseja realmente trocar para o cadastro de cliente?");

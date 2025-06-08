@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Catálogo de {{ comercio.estabelecimento }}</h1>
+
+    <a href="{% url 'home_cliente' %}">Pagina inicial</a>
+    <a href="{% url 'buscar_comercios' %}">Buscar comércios</a>
+    <br>
+    <a href="{% url 'perfil_cliente' %}">Perfil</a>
+    <br>
+    <a href="{% url 'comentario_cliente' %}">Comentários</a>
+    <br>
+    <a href="{% url 'estabelecimento_favoritados' %}">Lojas favoritas</a>
+    <br>
+    <a href="{% url 'carrinho' %}">
+        <button>Ver Carrinho de Compras</button>
+    </a>
+
+    {% if produtos %}
+        <ul>
+            {% for produto in produtos %}
+                <li>
+                    <h3>{{ produto.nome }}</h3>
+                    {% if produto.imagem %}
+                        <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}" width="200">
+                    {% endif %}
+                    <p><strong>Categoria:</strong> {{ produto.categoria }}</p>
+                    <p><strong>Preço:</strong> R$ {{ produto.preco }}</p>
+                    <p><strong>Estoque:</strong> {{ produto.estoque }}</p>
+                    <p><strong>Catálogo:</strong> {{ produto.catalogo }}</p>
+
+                    <!-- Botão de adicionar ao carrinho -->
+                    <form method="post" action="{% url 'adicionar_ao_carrinho' produto.id %}">
+                        {% csrf_token %}
+                        <button type="submit">Adicionar ao Carrinho</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Este comércio ainda não cadastrou nenhum produto.</p>
+    {% endif %}
+
+    <a href="{% url 'perfil_comercio_publico' comercio.id %}">Voltar ao perfil do comércio</a>
+    <br><br>
+    <a href="{% url 'home' %}">Sair da sua conta</a>
+</body>
+</html>
