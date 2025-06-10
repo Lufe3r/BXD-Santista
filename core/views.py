@@ -4,13 +4,14 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import ComercioForm, ClienteForm, LoginClienteForm, LoginComercioForm, ProdutoForm, ComercioPerfilForm, ClientePerfilForm
-from .models import Cliente, Comercio, Produto, TIPOS_COMERCIO, CompraFinalizada, Comentario
+from .models import Cliente, Comercio, Produto, TIPOS_COMERCIO, CompraFinalizada, Comentario, ItemCompra
 from django.conf import settings
 from django.db.models import Max
 from django.http import HttpResponse
 import random, re, string
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
+from django.utils.crypto import get_random_string
 
 def cliente_required(view_func):
     def _wrapped_view(request, *args, **kwargs):
@@ -237,53 +238,58 @@ def adicionar_ao_carrinho(request, produto_id):
     request.session['carrinho'] = carrinho
     return redirect('ver_catalogo', comercio_id=Produto.objects.get(id=produto_id).comercio_id)
 
+from django.utils.crypto import get_random_string
+from .models import CompraFinalizada, ItemCompra, Produto
+
 @cliente_required
-def finalizar_compra(request):
-    if request.method == 'POST':
-        pagamento = request.POST.get('pagamento')
-        carrinho = request.session.get('carrinho', {})
+def compras_finalizada(request):
+    carrinho = request.session.get('carrinho', {})
+    
+    if not carrinho:
+        return redirect('carrinho')  # Carrinho vazio
 
-        if not carrinho:
-            return HttpResponse("Carrinho vazio.")
+    total = 0
+    comercio = None
+    produtos_validos = []
 
-        produtos_lista = []
-        total = 0
-
-        for produto_id, quantidade in carrinho.items():
+    for produto_id, quantidade in carrinho.items():
+        try:
             produto = Produto.objects.get(id=produto_id)
-
-            if produto.estoque < quantidade:
-                return HttpResponse(f"Estoque insuficiente para o produto: {produto.nome}")
-
             subtotal = produto.preco * quantidade
             total += subtotal
 
-            # Subtrai do estoque
-            produto.estoque -= quantidade
-            produto.save()
+            # Pegamos o comércio do primeiro produto (assumindo que todos são do mesmo comércio)
+            if not comercio:
+                comercio = produto.comercio
 
-            produtos_lista.append({
-                'produto_id': produto.id,
-                'nome': produto.nome,
-                'quantidade': quantidade,
-                'subtotal': float(subtotal),
-            })
+            produtos_validos.append((produto, quantidade))
 
-        codigo = gerar_codigo()
+        except Produto.DoesNotExist:
+            continue
 
-        compra = CompraFinalizada.objects.create(
-            codigo=codigo,
-            usuario=request.user,
-            comercio=Produto.objects.get(id=list(carrinho.keys())[0]).comercio,
-            produtos=produtos_lista,
-            total=total
+    if not comercio:
+        return redirect('carrinho')  # Nenhum produto válido encontrado
+
+    # Cria a compra
+    compra = CompraFinalizada.objects.create(
+        usuario=request.user,
+        comercio=comercio,
+        total=total,
+        codigo=get_random_string(5).upper()
+    )
+
+    # Cria os itens da compra
+    for produto, quantidade in produtos_validos:
+        ItemCompra.objects.create(
+            compra=compra,
+            produto=produto,
+            quantidade=quantidade
         )
 
-        request.session['carrinho'] = {}  # limpa o carrinho
+    # Limpa o carrinho
+    request.session['carrinho'] = {}
 
-        return HttpResponse(f'Compra finalizada com sucesso! Código para retirada: {codigo}')
-
-    return redirect('carrinho')
+    return render(request, 'compras_finalizada.html', {'compra': compra})
 
 @cliente_required
 def cancelar_pedido(request):
@@ -297,10 +303,6 @@ def gerar_codigo(tamanho=5):
         if not CompraFinalizada.objects.filter(codigo=codigo).exists():
             return codigo
 
-@cliente_required
-def compras_clientes(request):
-    compras = CompraFinalizada.objects.filter(usuario=request.user).order_by('-data')
-    return render(request, 'compras_clientes.html', {'compras': compras})
 
 
 #PARTE DO COMERCIO
@@ -472,22 +474,20 @@ def marcar_entregue(request, codigo):
     compra = get_object_or_404(CompraFinalizada, codigo=codigo)
 
     if not compra.entregue:
-        for item in compra.produtos:
-            produto_id = item.get('id')
-            quantidade = item.get('quantidade', 1)
+        for item in compra.itens.all():
+            produto = item.produto
+            quantidade = item.quantidade
 
-            try:
-                produto = Produto.objects.get(id=produto_id)
-                produto.vendidos += quantidade
-                produto.estoque = max(produto.estoque - quantidade, 0)
-                produto.save()
-            except Produto.DoesNotExist:
-                pass  # Produto foi deletado ou está inválido
+            produto.vendidos += quantidade
+            produto.estoque = max(produto.estoque - quantidade, 0)
+            produto.save()
 
         compra.entregue = True
         compra.save()
 
-    return redirect('comercio_codigo_compra', codigo=codigo)
+    return redirect('home_comercio')
+
+
 
 @comercio_required
 def feedback_produtos(request):

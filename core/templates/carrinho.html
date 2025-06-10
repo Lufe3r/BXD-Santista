@@ -31,7 +31,7 @@
 
     <p><strong>Total:</strong> R$ {{ total }}</p>
 
-    <form method="post" action="{% url 'finalizar_compra' %}">
+    <form method="post" action="{% url 'compras_finalizada' %}">
         {% csrf_token %}
         <label>Escolha a forma de pagamento:</label><br>
         <input type="radio" name="pagamento" value="local" required> Pagar no local<br>

@@ -23,19 +23,22 @@ class Cliente(models.Model):
     def __str__(self):
         return self.nome
 
+class ItemCompra(models.Model):
+    compra = models.ForeignKey('CompraFinalizada', on_delete=models.CASCADE, related_name='itens')
+    produto = models.ForeignKey('Produto', on_delete=models.CASCADE)
+    quantidade = models.PositiveIntegerField()
 
 class CompraFinalizada(models.Model):
     codigo = models.CharField(max_length=5, unique=True)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     comercio = models.ForeignKey('Comercio', on_delete=models.CASCADE)
-    produtos = models.JSONField()
     total = models.DecimalField(max_digits=10, decimal_places=2)
     data = models.DateTimeField(auto_now_add=True)
     entregue = models.BooleanField(default=False)
 
     def __str__(self):
         return f'Compra {self.codigo} - {self.usuario}'
-
+    
 TIPOS_COMERCIO = [
     ('Mecanico', 'Mecânico'),
     ('Chaveiro', 'Chaveiro'),
