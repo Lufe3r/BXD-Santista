@@ -16,6 +16,20 @@
     {% endif %}
     <a href="{% url 'feedback_produtos' %}">Analises dos seus produtos</a>
 
+        <h2>Comentários recebidos</h2>
+    {% if comentarios %}
+    <ul>
+        {% for comentario in comentarios %}
+        <li>
+            <strong>{{ comentario.cliente.nome }}</strong> em {{ comentario.data|date:"d/m/Y H:i" }}:<br>
+            {{ comentario.texto }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>Você ainda não recebeu comentários.</p>
+    {% endif %}
+
     <br><br>
     <a href="{% url 'home' %}">Voltar à página inicial</a>
 </body>

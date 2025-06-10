@@ -4,11 +4,13 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import ComercioForm, ClienteForm, LoginClienteForm, LoginComercioForm, ProdutoForm, ComercioPerfilForm, ClientePerfilForm
-from .models import Cliente, Comercio, Produto, TIPOS_COMERCIO, CompraFinalizada
+from .models import Cliente, Comercio, Produto, TIPOS_COMERCIO, CompraFinalizada, Comentario
 from django.conf import settings
 from django.db.models import Max
 from django.http import HttpResponse
 import random, re, string
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 def cliente_required(view_func):
     def _wrapped_view(request, *args, **kwargs):
@@ -31,6 +33,7 @@ def comercio_required(view_func):
     return _wrapped_view
 
 
+  
 def home(request):
     return render(request, 'home.html')
 
@@ -68,6 +71,15 @@ def login_cliente(request):
             user = authenticate(request, username=usuario, password=senha)
             if user is not None:
                 login(request, user)
+                
+                # Salva na sessão o cliente_id
+                try:
+                    cliente = Cliente.objects.get(user=user)
+                    request.session['cliente_id'] = cliente.id
+                except Cliente.DoesNotExist:
+                    messages.error(request, 'Cliente não encontrado.')
+                    return redirect('login_cliente')
+
                 return redirect('home_cliente')
             else:
                 messages.error(request, 'Usuário ou senha inválidos.')
@@ -111,7 +123,30 @@ def estabelecimento_favoritados(request):
 
 @cliente_required
 def comentario_cliente(request):
-    return render(request, 'comentario_cliente.html')
+    cliente = Cliente.objects.get(user=request.user)
+    compras = CompraFinalizada.objects.filter(usuario=request.user)
+    comercios_autorizados = Comercio.objects.filter(id__in=compras.values_list('comercio_id', flat=True).distinct())
+
+    if request.method == 'POST':
+        comercio_id = request.POST.get('comercio_id')
+        texto = request.POST.get('comentario')
+        comercio = get_object_or_404(Comercio, id=comercio_id)
+
+        if comercio in comercios_autorizados:
+            Comentario.objects.create(
+                cliente=cliente,
+                comercio=comercio,
+                texto=texto
+            )
+            messages.success(request, 'Comentário enviado com sucesso.')
+        else:
+            messages.error(request, 'Você só pode comentar sobre comércios nos quais você comprou.')
+        return redirect('comentario_cliente')
+
+    return render(request, 'comentario_cliente.html', {
+        'comercios_comprados': comercios_autorizados
+    })
+
 
 def buscar_comercios(request):
     tipo_selecionado = request.GET.get('tipo')  # Pega o tipo selecionado na URL
@@ -144,6 +179,21 @@ def ver_catalogo(request, comercio_id):
         'produtos': produtos
     })
 
+@cliente_required
+def mudar_senha_cliente(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Senha alterada com sucesso!')
+            return redirect('perfil_cliente')
+        else:
+            messages.error(request, 'Erro ao mudar a senha. Verifique os campos.')
+    else:
+        form = PasswordChangeForm(user=request.user)
+    
+    return render(request, 'mudar_senha_cliente.html', {'form': form})
 
 def favoritar_comercio(request, comercio_id):
     print("Usuário logado:", request.user)
@@ -247,6 +297,12 @@ def gerar_codigo(tamanho=5):
         if not CompraFinalizada.objects.filter(codigo=codigo).exists():
             return codigo
 
+@cliente_required
+def compras_clientes(request):
+    compras = CompraFinalizada.objects.filter(usuario=request.user).order_by('-data')
+    return render(request, 'compras_clientes.html', {'compras': compras})
+
+
 #PARTE DO COMERCIO
 
 def limpa_cnpj(cnpj):
@@ -290,37 +346,45 @@ def login_comercio(request):
         form = LoginComercioForm(request.POST)
         if form.is_valid():
             cnpj = limpa_cnpj(form.cleaned_data['cnpj'])
-            senha = form.cleaned_data.get('senha')
+            senha = form.cleaned_data['senha']
 
-            user = authenticate(request, username=cnpj, password=senha)
-            if user is not None:
-                login(request, user)
-                try:
-                    comercio = Comercio.objects.get(user=user)
+            try:
+                comercio = Comercio.objects.get(cnpj=cnpj)
+                user = authenticate(request, username=comercio.user.username, password=senha)
+                if user is not None:
+                    login(request, user)
                     request.session['comercio_id'] = comercio.id
-                except Comercio.DoesNotExist:
-                    messages.error(request, 'Comércio não encontrado.')
-                    return redirect('login_comercio')
-
-                return redirect('home_comercio')
-            else:
-                messages.error(request, 'CNPJ ou senha inválidos.')
+                    return redirect('home_comercio')
+                else:
+                    messages.error(request, 'Senha incorreta.')
+            except Comercio.DoesNotExist:
+                messages.error(request, 'Comércio não encontrado.')
     else:
         form = LoginComercioForm()
 
     return render(request, 'login_comercio.html', {'form': form})
 
 
+
 @comercio_required
 def home_comercio(request):
     comercio = request.user.comercio
-    produto_mais_vendido = Produto.objects.filter(comercio=comercio).order_by('-vendidos').first()
+
+    # Obtenha o produto com maior número de vendas real (vendidos > 0)
+    produto_mais_vendido = (
+        Produto.objects.filter(comercio=comercio, vendidos__gt=0)
+        .order_by('-vendidos')
+        .first()
+    )
+
     produtos_em_falta = Produto.objects.filter(comercio=comercio, estoque=0)
+    produtos_baixo_estoque = Produto.objects.filter(comercio=comercio, estoque__lte=10, estoque__gt=0)
     compra = CompraFinalizada.objects.filter(comercio=comercio, entregue=False).first()
 
     context = {
         'produto_mais_vendido': produto_mais_vendido,
         'produtos_em_falta': produtos_em_falta,
+        'produtos_baixo_estoque': produtos_baixo_estoque,
         'compra': compra,
     }
 
@@ -406,11 +470,27 @@ def comercio_codigo_compra(request, codigo):
 @comercio_required
 def marcar_entregue(request, codigo):
     compra = get_object_or_404(CompraFinalizada, codigo=codigo)
-    compra.entregue = True
-    compra.save()
-    return redirect('comercio_codigo_compra', codigo=codigo)
 
+    if not compra.entregue:
+        for item in compra.produtos:
+            produto_id = item.get('id')
+            quantidade = item.get('quantidade', 1)
+
+            try:
+                produto = Produto.objects.get(id=produto_id)
+                produto.vendidos += quantidade
+                produto.estoque = max(produto.estoque - quantidade, 0)
+                produto.save()
+            except Produto.DoesNotExist:
+                pass  # Produto foi deletado ou está inválido
+
+        compra.entregue = True
+        compra.save()
+
+    return redirect('comercio_codigo_compra', codigo=codigo)
 
 @comercio_required
 def feedback_produtos(request):
-    return render(request, 'feedback_produtos.html')
+    comercio = request.user.comercio  # Pegando o comércio logado
+    comentarios = Comentario.objects.filter(comercio=comercio).order_by('-data')
+    return render(request, 'feedback_produtos.html', {'comentarios': comentarios})

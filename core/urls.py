@@ -31,8 +31,10 @@ urlpatterns = [
     path('finalizar-compra/', views.finalizar_compra, name='finalizar_compra'),
     path('cancelar-pedido/', views.cancelar_pedido, name='cancelar_pedido'),
     path('finalizar-compra/', views.finalizar_compra, name='finalizar_compra'),
-    path('compra/<str:codigo>/compra', views.comercio_codigo_compra, name='comercio_codigo_compra'),
-    path('compra/<str:codigo>/entregue/', views.marcar_entregue, name='marcar_entregue')
+    path('compra/<str:codigo>/compra/', views.comercio_codigo_compra, name='comercio_codigo_compra'),
+    path('compra/<str:codigo>/entregue/', views.marcar_entregue, name='marcar_entregue'),
+    path('cliente/compras/', views.compras_clientes, name='compras_clientes'),
+    path('cliente/mudar_senha/', views.mudar_senha_cliente, name='mudar_senha_cliente'),
 ]
 
 if settings.DEBUG:

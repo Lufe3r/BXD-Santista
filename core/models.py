@@ -3,7 +3,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.models import User
 
 class Cliente(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     nome = models.CharField(max_length=150, unique=True)
     email = models.EmailField(unique=True)
     senha = models.CharField(max_length=128)
@@ -89,14 +89,22 @@ class Produto(models.Model):
     comercio = models.ForeignKey('Comercio', on_delete=models.CASCADE, related_name='produtos')
     nome = models.CharField(max_length=100)
     categoria = models.CharField(max_length=50)
-    estoque = models.PositiveIntegerField()
     preco = models.DecimalField(max_digits=10, decimal_places=2)
     catalogo = models.CharField(max_length=100)
     imagem = models.ImageField(upload_to='produtos/', null=True, blank=True)
-    numero_local = models.PositiveIntegerField(default=0) 
-
+    numero_local = models.PositiveIntegerField(default=0)
     estoque = models.PositiveIntegerField(default=0)
     vendidos = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.nome
+
+
+class Comentario(models.Model):
+    cliente = models.ForeignKey('Cliente', on_delete=models.CASCADE)
+    comercio = models.ForeignKey('Comercio', on_delete=models.CASCADE)
+    texto = models.TextField()
+    data = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Comentário de {self.cliente} em {self.comercio}'

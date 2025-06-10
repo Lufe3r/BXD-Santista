@@ -27,6 +27,25 @@
     <p>Nenhum produto vendido ainda.</p>
 {% endif %}
 
+<!-- Produtos com estoque baixo -->
+<h3>Estoque baixo (≤ 10 unidades)</h3>
+{% if produtos_baixo_estoque %}
+    <ul>
+    {% for produto in produtos_baixo_estoque %}
+        <li>
+            {{ produto.nome }} - {{ produto.estoque }} unidades
+            {% if produto.imagem %}
+                <br>
+                <img src="{{ produto.imagem.url }}" height="80">
+            {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Todos os produtos com estoque acima de 10 unidades.</p>
+{% endif %}
+
+
 <!-- Em falta no estoque -->
  <h3>Faltando no estoque</h3>
 {% for produto in produtos_em_falta %}

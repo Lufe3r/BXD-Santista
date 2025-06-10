@@ -17,6 +17,29 @@
     <br></br>
     <br></br>
     <br></br>
+    <h2>Deixe um comentário</h2>
+
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+
+    <form method="post">
+    {% csrf_token %}
+    <label for="comercio_id">Comércio:</label>
+    <select name="comercio_id" required>
+        {% for comercio in comercios_comprados %}
+        <option value="{{ comercio.id }}">{{ comercio.nome }}</option>
+        {% endfor %}
+    </select>
+
+    <br><br>
+
+    <label for="comentario">Comentário:</label><br>
+    <textarea name="comentario" rows="4" cols="50" required></textarea>
+
+    <br><br>
+    <button type="submit">Enviar Comentário</button>
+    </form>
     <a href="{% url 'home' %}">saia da sua conta</a>
 </body>
 </html>
