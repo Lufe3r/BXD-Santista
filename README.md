@@ -29,7 +29,6 @@
 
 - Python 3.11+
 - Django 4.x
-- PostgreSQL
 - HTML + CSS
 - JavaScript (básico)
 - Bootstrap (opcional)
