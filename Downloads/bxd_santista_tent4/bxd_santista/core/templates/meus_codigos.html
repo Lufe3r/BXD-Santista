@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Meus Códigos de Compra</title>
+  <link rel="stylesheet" href="{% static 'css/meus_codigos_compra.css' %}">
+</head>
+<body>
+
+  <h2>Seus Códigos de Compra</h2>
+
+  <a href="{% url 'home_cliente' %}">Pagina inicial</a>
+    <a href="{% url 'buscar_comercios' %}">Buscar comércios</a>
+    <br>
+    <a href="{% url 'perfil_cliente' %}">Perfil</a>
+    <br>
+    <a href="{% url 'comentario_cliente' %}">Comentários</a>
+    <br>
+    <a href="{% url 'estabelecimento_favoritados' %}">Lojas favoritas</a>
+    <br>
+    <a href="{% url 'meus_codigos_compra' %}">Ver meus códigos de compra</a>
+    <br>
+    <a href="{% url 'carrinho' %}">
+        <button>Ver Carrinho de Compras</button>
+    </a>
+
+  {% if compras %}
+    <ul>
+      {% for compra in compras %}
+        <li>
+          <strong>Código:</strong> {{ compra.codigo }}<br>
+          <strong>Data:</strong> {{ compra.data|date:"d/m/Y H:i" }}<br>
+          <strong>Comércio:</strong> {{ compra.comercio.estabelecimento }}<br>
+          <strong>Itens:</strong>
+          <ul>
+            {% for item in compra.itemcompra_set.all %}
+              <li>{{ item.produto.nome }} ({{ item.quantidade }}x) - R$ {{ item.produto.preco|floatformat:2 }}</li>
+            {% endfor %}
+          </ul>
+          <strong>Total:</strong> R$ {{ compra.total|floatformat:2 }}
+        </li>
+        <br>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Você ainda não realizou nenhuma compra.</p>
+  {% endif %}
+
+</body>
+</html>

@@ -1,0 +1,66 @@
+{% load static %}
+
+<!DOCTYPE html> <html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Comentários</title>
+    <link rel="stylesheet" href="{% static 'css/comentario.css' %}" />
+  </head>
+  <body>
+    <!-- Sidebar fixa -->
+    <div class="sidebar">
+      <h2>Cliente</h2>
+      <a href="{% url 'home_cliente' %}">Página Inicial</a>
+      <a href="{% url 'buscar_comercios' %}">Buscar Comércios</a>
+      <a href="{% url 'perfil_cliente' %}">Perfil</a>
+      <a href="{% url 'comentario_cliente' %}">Comentários</a>
+      <a href="{% url 'estabelecimento_favoritados' %}">Lojas Favoritas</a>
+      <a href="{% url 'meus_codigos_compra' %}">Códigos de Compra</a>
+      <a href="{% url 'carrinho' %}"><button>Ver Carrinho de Compras</button></a>
+      <br />
+      <br /> <a href="{% url 'home' %}">Sair da Conta</a>
+    </div> <!-- Conteúdo principal --> <div class="main-content">
+      <h2>Seus Comentários</h2>
+
+      {% if comentarios_feitos %}
+        <ul>
+          {% for comentario in comentarios_feitos %}
+            <li>
+              <strong>{{ comentario.comercio.estabelecimento }}</strong>
+              ({{ comentario.data|date:'d/m/Y H:i' }})<br />
+              {{ comentario.texto }}
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>Você ainda não fez comentários.</p>
+      {% endif %}
+
+      {% if comercios_comprados %}
+        <h2>Deixe um Comentário</h2>
+
+        {% for message in messages %}
+          <p class="message">{{ message }}</p>
+        {% endfor %}
+
+        <form method="post">
+          {% csrf_token %}
+          <label for="comercio_id">Comércio:</label>
+          <select name="comercio_id" required>
+            {% for comercio in comercios_comprados %}
+              <option value="{{ comercio.id }}">{{ comercio.nome }}</option>
+            {% endfor %}
+          </select>
+
+          <label for="comentario">Comentário:</label>
+          <textarea name="comentario" rows="4" required></textarea>
+
+          <button type="submit">Enviar Comentário</button>
+        </form>
+      {% else %}
+        <p>Você ainda não realizou nenhuma compra para comentar.</p>
+      {% endif %}
+    </div>
+  </body>
+</html>

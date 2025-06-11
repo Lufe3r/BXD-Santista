@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+<link rel="stylesheet" href="{% static 'css/feedback.css' %}">
+
+</head>
+<body>
+    <a href="{% url 'home_comercio' %}">Página Inicial</a>
+    <a href="{% url 'perfil_comercio' %}">Perfil</a>
+    <a href="{% url 'estoque' %}">Estoque</a>
+    {% if compra %}
+    <a href="{% url 'comercio_codigo_compra' codigo=compra.codigo %}">Compras em andamento</a>
+    {% else %}
+        <p>Sem compras em andamento.</p>
+    {% endif %}
+    <a href="{% url 'feedback_produtos' %}">Analises dos seus produtos</a>
+
+        <h2>Comentários recebidos</h2>
+    {% if comentarios %}
+    <ul>
+        {% for comentario in comentarios %}
+        <li>
+            <strong>{{ comentario.cliente.nome }}</strong> em {{ comentario.data|date:"d/m/Y H:i" }}:<br>
+            {{ comentario.texto }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>Você ainda não recebeu comentários.</p>
+    {% endif %}
+
+    <br><br>
+    <a href="{% url 'home' %}">Voltar à página inicial</a>
+</body>
+</html>

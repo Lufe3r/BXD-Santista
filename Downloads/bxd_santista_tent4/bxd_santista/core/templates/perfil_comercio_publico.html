@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+<link rel="stylesheet" href="{% static 'css/Perfil_comercio_publico.css' %}">
+
+</head>
+<body>
+    <h1>{{ comercio.estabelecimento }}</h1>
+    <a href="{% url 'home_cliente' %}">Pagina inicial</a>
+    <a href="{% url 'buscar_comercios' %}">Buscar comércios</a>
+    <br>
+    <a href="{% url 'perfil_cliente' %}">Perfil</a>
+    <br>
+    <a href="{% url 'comentario_cliente' %}">Comentários</a>
+    <br>
+    <a href="{% url 'estabelecimento_favoritados' %}">Lojas favoritas</a>
+    <br>
+    <a href="{% url 'meus_codigos_compra' %}">Ver meus códigos de compra</a>
+    <br>
+    <a href="{% url 'carrinho' %}">
+        <button>Ver Carrinho de Compras</button>
+    </a>
+    
+{% if comercio.imagem %}
+    <img src="{{ comercio.imagem.url }}" alt="Imagem do comércio" style="max-width: 300px;">
+{% endif %}
+
+<p><strong>Tipo:</strong> {{ comercio.tipo_comercio }}</p>
+<p><strong>Descrição:</strong> {{ comercio.descricao }}</p>
+<p><strong>Horário de funcionamento:</strong> {{ comercio.horario_funcionamento }}</p>
+<p><strong>Formas de pagamento:</strong> {{ comercio.formas_pagamento }}</p>
+<p><strong>Endereço:</strong> {{ comercio.endereco }}</p>
+
+<form action="{% url 'favoritar_comercio' comercio.id %}" method="post">
+    {% csrf_token %}
+    {% if comercio in cliente.favoritos.all %}
+        <button type="submit">Remover dos Favoritos ❤️</button>
+    {% else %}
+        <button type="submit">Adicionar aos Favoritos 🤍</button>
+    {% endif %}
+</form>
+<a href="{% url 'buscar_comercios' %}">Voltar para busca</a>
+
+<a href="{% url 'ver_catalogo' comercio.id %}">
+    <button>Ver Catálogo</button>
+    <br></br>
+    <br></br>
+    <a href="{% url 'home' %}">saia da sua conta</a>
+</a>
+</body>
+</html>

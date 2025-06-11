@@ -1,0 +1,16 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head><title>Confirmar remoção</title>
+<link rel="stylesheet" href="{% static 'css/confirmar_remocao.css' %}">
+</head>
+<body>
+    <h1>Tem certeza que deseja remover o produto "{{ produto.nome }}"?</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Sim, remover</button>
+        <a href="{% url 'estoque' %}">Cancelar</a>
+    </form>
+</body>
+</html>

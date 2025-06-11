@@ -1,0 +1,113 @@
+/* Aplica fonte e layout principal */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to right,  #2076BA, #89CFF0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Container flexível com dois painéis */
+.container {
+    display: flex;
+    width: 90%;
+    max-width: 1100px;
+
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+/* Painel da esquerda com texto */
+.left-panel {
+    flex: 1;
+    padding: 40px;
+    border-right: 2px solid #e0e0e0;
+}
+
+.left-panel h1 {
+    font-size: 2.2em;
+    color: #0D47A1;
+    margin-bottom: 20px;
+}
+
+.left-panel .intro,
+.left-panel .call-to-action {
+    font-size: 1.1em;
+    color: #fffdfd;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.left-panel .benefits {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 20px;
+}
+
+.left-panel .benefits li {
+    font-size: 1em;
+    color: #fffdfd;
+    margin-bottom: 8px;
+}
+
+/* Painel da direita com formulário */
+.right-panel {
+    flex: 1;
+    color: white;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.right-panel h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+form {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    color: black;
+}
+
+form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1em;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0B3C8A;
+}
+
+.messages {
+    margin-top: 20px;
+    color: #ffeb3b;
+    font-weight: bold;
+    list-style: none;
+    padding: 0;
+    text-align: center;
+}

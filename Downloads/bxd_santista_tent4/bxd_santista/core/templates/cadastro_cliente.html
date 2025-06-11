@@ -1,28 +1,46 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <title>Cadastro Cliente</title>
+    <link rel="stylesheet" href="{% static 'css/cadastro_cliente.css' %}">
 </head>
 <body>
-    <h1>Cadastro de Cliente</h1>
+    <div class="container">
+        <!-- Painel esquerdo com texto -->
+        <div class="left-panel">
+            <h1>✨ Crie sua conta e comece uma nova experiência!</h1>
+            <p class="intro">Você está a poucos cliques de transformar a forma como encontra serviços e produtos.</p>
+            <p class="call-to-action">Cadastre-se gratuitamente e tenha acesso a uma rede de comércios confiáveis, ofertas exclusivas e um ambiente feito para facilitar o seu dia a dia.</p>
+            <ul class="benefits">
+                <li>📍 Descubra novos serviços perto de você.</li>
+                <li>🛒 Acompanhe seus pedidos e solicitações com facilidade.</li>
+                <li>💬 Converse direto com os fornecedores e tire dúvidas em tempo real.</li>
+                <li>🌟 Receba recomendações personalizadas com base no que você procura!</li>
+            </ul>
+        </div>
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Cadastrar</button>
-    </form>
-
-    <p>
-        <a href="{% url 'cadastro_comercio' %}" onclick="return confirmarTroca();">
-            Clique aqui para entrar como vendedor
-        </a>
-    </p>
+        <!-- Painel direito com formulário -->
+        <div class="right-panel">
+            <h2>Cadastro de Cliente</h2>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Cadastrar</button>
+            </form>
+            <p class="switch-link">
+                <a href="{% url 'cadastro_comercio' %}" onclick="return confirmarTroca();">
+                    Clique aqui para entrar como vendedor
+                </a>
+            </p>
+        </div>
+    </div>
 
     <script>
-    function confirmarTroca() {
-        return confirm("Você deseja realmente trocar para o cadastro de vendedor?");
-    }
+        function confirmarTroca() {
+            return confirm("Você deseja realmente trocar para o cadastro de vendedor?");
+        }
     </script>
 </body>
 </html>

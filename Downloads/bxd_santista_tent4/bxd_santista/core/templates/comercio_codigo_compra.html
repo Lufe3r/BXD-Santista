@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+     <link rel="stylesheet" href="{% static 'css/ccomercio_codigo.css' %}">
+</head>
+<body>
+    <a href="{% url 'home_comercio' %}">Página Inicial</a>
+    <a href="{% url 'perfil_comercio' %}">Perfil</a>
+    <a href="{% url 'estoque' %}">Estoque</a>
+    {% if compra %}
+    <a href="{% url 'comercio_codigo_compra' codigo=compra.codigo %}">Compras em andamento</a>
+    {% else %}
+        <p>Sem compras em andamento.</p>
+    {% endif %}
+    <a href="{% url 'feedback_produtos' %}">Analises dos seus produtos</a>
+    <h2>Detalhes da Compra - Código: {{ compra.codigo }}</h2>
+        <p>Cliente: {{ compra.usuario.username }}</p>
+        <p>Total: R$ {{ compra.total }}</p>
+        <p>Produtos:</p>
+        <ul>
+            {% for item in compra.produtos %}
+                <li>{{ item.nome }} - Quantidade: {{ item.quantidade }} - Subtotal: R$ {{ item.subtotal }}</li>
+            {% endfor %}
+        </ul>
+
+        <p>Status: {{ compra.entregue|yesno:"Entregue,Não entregue" }}</p>
+
+        <form method="post" action="{% url 'marcar_entregue' compra.codigo %}">
+            {% csrf_token %}
+            <button type="submit">Marcar como entregue</button>
+        </form>
+    <br><br>
+    <a href="{% url 'home' %}">Voltar à página inicial</a>
+</body>
+</html>

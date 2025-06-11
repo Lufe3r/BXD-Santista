@@ -1,19 +1,44 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <title>Login Comércio</title>
+  <meta charset="UTF-8">
+  <title>Login Comércio</title>
+  <link rel="stylesheet" href="{% static 'css/login_comercio.css' %}">
 </head>
 <body>
-    <h1>Login Comércio</h1>
-   <form method="post">
-  {% csrf_token %}
-  <input type="text" name="cnpj" placeholder="CNPJ" required>
-  <input type="text" name="chave_acesso" placeholder="Chave de Acesso" required>
-  <button type="submit">Entrar</button>
-  {% if erro %}
-    <p style="color: red;">{{ erro }}</p>
-  {% endif %}
-</form>
+  <div class="container">
+    <div class="left-panel">
+      <h1>Bem-vindo ao BXD</h1>
+      <p class="intro">
+        Gerencie seu estoque com eficiência e conecte-se a serviços compartilhados de forma simples e segura.
+      </p>
+      <ul class="benefits">
+        <li>🔹 Controle total sobre seus produtos e recursos.</li>
+        <li>🔹 Acesso rápido às informações essenciais.</li>
+        <li>🔹 Colaboração inteligente para otimizar operações.</li>
+      </ul>
+      <p class="call-to-action">
+        Faça login para começar a organizar e otimizar seu fluxo de trabalho.
+      </p>
+    </div>
+
+    <div class="right-panel">
+      <h2>Login Comércio</h2>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Entrar</button>
+      </form>
+
+      {% if messages %}
+        <ul class="messages">
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+  </div>
 </body>
 </html>

@@ -1,27 +1,60 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <title>Cadastro Comércio</title>
+    <link rel="stylesheet" href="{% static 'css/cadastro_comercio.css' %}">
 </head>
 <body>
-    <h1>Cadastro de Comércio</h1>
+    <div class="container">
 
-    <form method="post">
-    {% csrf_token %}
-    <p>{{ form.nome.label_tag }} {{ form.nome }}</p>
-    <p>{{ form.email.label_tag }} {{ form.email }}</p>
-    <p>{{ form.estabelecimento.label_tag }} {{ form.estabelecimento }}</p>
-    <p>{{ form.cnpj.label_tag }} {{ form.cnpj }}</p>
+        <!-- Coluna da Esquerda: Texto e benefícios -->
+        <div class="left-column">
+            <h1>Vamos juntos transformar sua gestão?</h1>
+            <p>📦💼 Mais controle, mais clientes, mais crescimento!</p>
+            <p>Seja você um comerciante querendo organizar seu estoque ou um cliente em busca dos melhores serviços, aqui é o lugar certo! 💡</p>
+            <ul>
+                <li>Gerencie seus produtos e serviços com facilidade.</li>
+                <li>Conecte-se com clientes e aumente suas vendas.</li>
+                <li>Encontre exatamente o que precisa, sem complicação!</li>
+            </ul>
+            <p>🎉 <strong>Cadastre-se agora</strong> e faça parte dessa revolução! 🚀</p>
+        </div>
 
-    <button type="submit">Cadastrar</button>
-</form>
+        <!-- Coluna da Direita: Formulário -->
+        <div class="right-column">
+            <div class="login-form">
+                <h2>Cadastro de Comércio</h2>
 
-    <p>
-        <a href="{% url 'cadastro_cliente' %}" onclick="return confirmarTroca();">
-            Clique aqui para entrar como cliente
-        </a>
-    </p>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">Cadastrar</button>
+                </form>
+
+                {% if form.errors %}
+                    <ul>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <li><strong>Erro:</strong> {{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
+                <p>
+                    <a href="{% url 'cadastro_cliente' %}" onclick="return confirmarTroca();">
+                        Clique aqui para entrar como cliente
+                    </a>
+                </p>
+            </div>
+        </div>
+
+    </div>
 
     <script>
     function confirmarTroca() {

@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+<link rel="stylesheet" href="{% static 'css/perfil_comercio.css' %}">
+
+</head>
+<body>
+    <a href="{% url 'home_comercio' %}">pagina inicial</a>
+    <a href="{% url 'perfil_comercio' %}">perfil</a>
+    <a href="{% url 'estoque' %}">Estoque</a>
+    {% if compra %}
+    <a href="{% url 'comercio_codigo_compra' codigo=compra.codigo %}">Compras em andamento</a>
+    {% else %}
+        <p>Sem compras em andamento.</p>
+    {% endif %}
+    <a href="{% url 'feedback_produtos' %}">Analises dos seus produtos</a>
+        {% block content %}
+        <h2>Perfil do Comércio</h2>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            {% if form.imagem_estabelecimento %}
+                <p>Imagem atual:</p>
+                <img src="{{ form.instance.imagem_estabelecimento.url }}" height="150" alt="Imagem do Estabelecimento">
+            {% endif %}
+            <button type="submit">Salvar alterações</button>
+            <a href="{% url 'mudar_senha_comercio' %}">Mudar senha</a>
+        </form>
+
+        {% endblock %}
+    <br></br>
+    <a href="{% url 'home' %}">Volte a pagina inicial</a>
+</body>
+</html>

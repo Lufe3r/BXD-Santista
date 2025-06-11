@@ -1,0 +1,99 @@
+body {
+display: flex;
+min-height: 100vh;
+background-color: #f2f2f2;
+}
+
+/* Sidebar opcional — se for usar */
+.sidebar {
+width: 220px;
+background-color: #333;
+color: white;
+padding: 20px;
+position: fixed;
+height: 100%;
+}
+
+.sidebar h2 {
+font-size: 20px;
+margin-bottom: 20px;
+color: #fff;
+}
+
+.sidebar a {
+display: block;
+margin-bottom: 10px;
+text-decoration: none;
+color: white;
+padding: 8px;
+border-radius: 4px;
+}
+
+.sidebar a:hover {
+background-color: #444;
+}
+
+
+.main-content {
+margin-left: 240px; 
+padding: 30px;
+width: 100%;
+}
+
+.main-content h2 {
+margin-bottom: 20px;
+color: #333;
+}
+
+/* Estilo da lista de favoritos */
+ul {
+list-style: none;
+padding: 0;
+}
+
+li {
+background-color: #fff;
+margin-bottom: 20px;
+padding: 15px;
+border-radius: 10px;
+box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+li img {
+display: block;
+margin-bottom: 10px;
+border-radius: 6px;
+}
+
+li a {
+font-size: 18px;
+text-decoration: none;
+color: #007BFF;
+}
+
+li a:hover {
+text-decoration: underline;
+}
+
+/* Botão do carrinho */
+button {
+padding: 8px 16px;
+background-color: #007BFF;
+border: none;
+color: white;
+border-radius: 5px;
+cursor: pointer;
+}
+
+button:hover {
+background-color: #0056b3;
+}
+
+/* Link de sair */
+.logout {
+display: block;
+margin-top: 40px;
+text-decoration: none;
+color: red;
+font-weight: bold;
+}

@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Buscar Comércios</title>
+    <link rel="stylesheet" href="{% static 'css/buscar_comercios.css' %}">
+</head>
+<body>
+
+    <!-- Sidebar fixa à esquerda -->
+    <div class="sidebar">
+        <h2>Cliente</h2>
+        <a href="{% url 'home_cliente' %}">Página Inicial</a>
+        <a href="{% url 'buscar_comercios' %}">Buscar Comércios</a>
+        <a href="{% url 'perfil_cliente' %}">Perfil</a>
+        <a href="{% url 'comentario_cliente' %}">Comentários</a>
+        <a href="{% url 'estabelecimento_favoritados' %}">Lojas Favoritas</a>
+        <a href="{% url 'meus_codigos_compra' %}">Códigos de Compra</a>
+        <a href="{% url 'home' %}">Sair da Conta</a>
+    </div>
+
+    <!-- Topbar fixa no topo -->
+    <div class="topbar">
+        <a href="{% url 'carrinho' %}" class="carrinho-btn">🛒 Carrinho</a>
+    </div>
+
+    <!-- Envolve o conteúdo principal -->
+    <div class="main-wrapper">
+        <div class="main-content">
+            <h1>Buscar Comércios</h1>
+
+            <form method="get" action="{% url 'buscar_comercios' %}">
+                <label for="tipo">Filtrar por tipo:</label>
+                <select name="tipo" id="tipo" onchange="this.form.submit()">
+                    <option value="">Todos</option>
+                    {% for tipo, nome in tipos %}
+                        <option value="{{ tipo }}" {% if tipo == tipo_selecionado %}selected{% endif %}>
+                            {{ nome }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </form>
+
+            <hr>
+
+            {% if comercios %}
+                <ul>
+                    {% for comercio in comercios %}
+                        <li>
+                            <a href="{% url 'perfil_comercio_publico' comercio.id %}">
+                                <strong>{{ comercio.estabelecimento }}</strong>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Nenhum comércio encontrado.</p>
+            {% endif %}
+        </div>
+    </div>
+
+</body>
+</html>
