@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.models import User
+from django.templatetags.static import static
 
 class Cliente(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -13,7 +14,11 @@ class Cliente(models.Model):
     genero = models.CharField(max_length=20, blank=True)
     imagem_perfil = models.ImageField(upload_to='clientes/', blank=True, null=True)
 
-
+    def imagem_perfil_url(self):
+        if self.imagem_perfil and hasattr(self.imagem_perfil, 'url'):
+            return self.imagem_perfil.url
+        return static('images/default_profile.png')
+    
     def set_senha(self, raw_password):
         self.senha = make_password(raw_password)
 
@@ -111,3 +116,4 @@ class Comentario(models.Model):
 
     def __str__(self):
         return f'Comentário de {self.cliente} em {self.comercio}'
+    

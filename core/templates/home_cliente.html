@@ -5,6 +5,7 @@
     <title>Home Cliente</title>
 </head>
 <body>
+    
     <h1>Bem-vindo, Cliente!</h1>
     <a href="{% url 'home_cliente' %}">Pagina inicial</a>
     <a href="{% url 'buscar_comercios' %}">Buscar comércios</a>
@@ -15,11 +16,11 @@
     <br>
     <a href="{% url 'estabelecimento_favoritados' %}">Lojas favoritas</a>
     <br>
+    <a href="{% url 'meus_codigos_compra' %}">Ver meus códigos de compra</a>
+    <br>
     <a href="{% url 'carrinho' %}">
         <button>Ver Carrinho de Compras</button>
     </a>
-    <a href="{% url 'compras_finalizada' %}">suas compras</a>
-    <br>
     <br></br>
     <br></br>
     <a href="{% url 'home' %}">saia da sua conta</a>

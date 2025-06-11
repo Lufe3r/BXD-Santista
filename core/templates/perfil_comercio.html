@@ -26,6 +26,7 @@
                 <img src="{{ form.instance.imagem_estabelecimento.url }}" height="150" alt="Imagem do Estabelecimento">
             {% endif %}
             <button type="submit">Salvar alterações</button>
+            <a href="{% url 'mudar_senha_comercio' %}">Mudar senha</a>
         </form>
 
         {% endblock %}

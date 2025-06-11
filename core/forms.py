@@ -66,4 +66,14 @@ class ClientePerfilForm(forms.ModelForm):
         model = Cliente
         fields = ['nome', 'telefone', 'email', 'idade', 'genero', 'imagem_perfil']
 
+class ClienteMudarSenhaForm(forms.Form):
+    senha_atual = forms.CharField(widget=forms.PasswordInput, label='Senha atual')
+    nova_senha = forms.CharField(widget=forms.PasswordInput, label='Nova senha')
+    confirmar_senha = forms.CharField(widget=forms.PasswordInput, label='Confirmar nova senha')
+
+class ComercioMudarSenhaForm(forms.Form):
+    senha_atual = forms.CharField(widget=forms.PasswordInput, label="Senha atual")
+    nova_senha = forms.CharField(widget=forms.PasswordInput, label="Nova senha")
+    confirmar_senha = forms.CharField(widget=forms.PasswordInput, label="Confirmar nova senha")
+
 

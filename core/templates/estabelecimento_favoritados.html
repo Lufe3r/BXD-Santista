@@ -15,6 +15,8 @@
     <br>
     <a href="{% url 'estabelecimento_favoritados' %}">Lojas favoritas</a>
     <br>
+    <a href="{% url 'meus_codigos_compra' %}">Ver meus códigos de compra</a>
+    <br>
     <a href="{% url 'carrinho' %}">
         <button>Ver Carrinho de Compras</button>
     </a>
@@ -22,6 +24,10 @@
                 <ul>
                 {% for comercio in favoritos %}
                     <li>
+                        {% if comercio.imagem %}
+                            <img src="{{ comercio.imagem.url }}" alt="Imagem de {{ comercio.estabelecimento }}" width="150" height="150">
+                        {% endif %}
+                        <br>
                         <a href="{% url 'perfil_comercio_publico' comercio.id %}">
                             {{ comercio.estabelecimento }}
                         </a>

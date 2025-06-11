@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import ComercioForm, ClienteForm, LoginClienteForm, LoginComercioForm, ProdutoForm, ComercioPerfilForm, ClientePerfilForm
+from .forms import ComercioForm, ClienteForm, LoginClienteForm, LoginComercioForm, ProdutoForm, ComercioPerfilForm, ClientePerfilForm, ComercioMudarSenhaForm, ClienteMudarSenhaForm
 from .models import Cliente, Comercio, Produto, TIPOS_COMERCIO, CompraFinalizada, Comentario, ItemCompra
 from django.conf import settings
 from django.db.models import Max
@@ -95,21 +95,51 @@ def home_cliente(request):
 
 @cliente_required
 def perfil_cliente(request):
-    cliente_id = request.session.get('cliente_id')
-    if not cliente_id:
+    cliente = getattr(request.user, 'cliente', None)
+    if not cliente:
         return redirect('login_cliente')
 
-    cliente_obj = Cliente.objects.get(id=cliente_id)
-
     if request.method == 'POST':
-        form = ClientePerfilForm(request.POST, request.FILES, instance=cliente_obj)
+        form = ClientePerfilForm(request.POST, request.FILES, instance=cliente)
         if form.is_valid():
             form.save()
             return redirect('perfil_cliente')
     else:
-        form = ClientePerfilForm(instance=cliente_obj)
+        form = ClientePerfilForm(instance=cliente)
 
-    return render(request, 'perfil_cliente.html', {'form': form})
+    return render(request, 'perfil_cliente.html', {'form': form, 'cliente': cliente})
+
+
+@cliente_required
+def mudar_senha_cliente(request):
+    cliente_id = request.session.get('cliente_id')
+    if not cliente_id:
+        return redirect('login_cliente')
+
+    cliente = Cliente.objects.get(id=cliente_id)
+    user = cliente.user  # usuário real (User)
+
+    if request.method == 'POST':
+        form = ClienteMudarSenhaForm(request.POST)
+        if form.is_valid():
+            senha_atual = form.cleaned_data['senha_atual']
+            nova_senha = form.cleaned_data['nova_senha']
+            confirmar_senha = form.cleaned_data['confirmar_senha']
+
+            if not user.check_password(senha_atual):
+                messages.error(request, "Senha atual incorreta.")
+            elif nova_senha != confirmar_senha:
+                messages.error(request, "As novas senhas não coincidem.")
+            else:
+                user.set_password(nova_senha)
+                user.save()
+                update_session_auth_hash(request, user)  # mantém logado
+                messages.success(request, "Senha alterada com sucesso.")
+                return redirect('perfil_cliente')
+    else:
+        form = ClienteMudarSenhaForm()
+
+    return render(request, 'mudar_senha_cliente.html', {'form': form})
 
 @cliente_required
 def estabelecimento_favoritados(request):
@@ -125,8 +155,17 @@ def estabelecimento_favoritados(request):
 @cliente_required
 def comentario_cliente(request):
     cliente = Cliente.objects.get(user=request.user)
+
+    # Buscar as compras feitas por este cliente
     compras = CompraFinalizada.objects.filter(usuario=request.user)
-    comercios_autorizados = Comercio.objects.filter(id__in=compras.values_list('comercio_id', flat=True).distinct())
+
+    # Comercios em que ele comprou
+    comercios_autorizados = Comercio.objects.filter(
+        id__in=compras.values_list('comercio_id', flat=True).distinct()
+    )
+
+    # Comentários já feitos por este cliente
+    comentarios_feitos = Comentario.objects.filter(cliente=cliente).order_by('-data')
 
     if request.method == 'POST':
         comercio_id = request.POST.get('comercio_id')
@@ -142,11 +181,14 @@ def comentario_cliente(request):
             messages.success(request, 'Comentário enviado com sucesso.')
         else:
             messages.error(request, 'Você só pode comentar sobre comércios nos quais você comprou.')
+
         return redirect('comentario_cliente')
 
     return render(request, 'comentario_cliente.html', {
-        'comercios_comprados': comercios_autorizados
+        'comercios_comprados': comercios_autorizados,
+        'comentarios_feitos': comentarios_feitos
     })
+
 
 
 def buscar_comercios(request):
@@ -289,7 +331,7 @@ def compras_finalizada(request):
     # Limpa o carrinho
     request.session['carrinho'] = {}
 
-    return render(request, 'compras_finalizada.html', {'compra': compra})
+    return render(request, 'meus_codigos.html', {'compra': compra})
 
 @cliente_required
 def cancelar_pedido(request):
@@ -301,8 +343,12 @@ def gerar_codigo(tamanho=5):
     while True:
         codigo = ''.join(random.choice(caracteres) for _ in range(tamanho))
         if not CompraFinalizada.objects.filter(codigo=codigo).exists():
-            return codigo
-
+            return codigo 
+        
+@cliente_required
+def meus_codigos_compra(request):
+    compras = CompraFinalizada.objects.filter(usuario=request.user).order_by('-data')  # do mais recente pro mais antigo
+    return render(request, 'meus_codigos.html', {'compras': compras})
 
 
 #PARTE DO COMERCIO
@@ -406,6 +452,33 @@ def perfil_comercio(request):
         form = ComercioPerfilForm(instance=comercio)
 
     return render(request, 'perfil_comercio.html', {'form': form})
+
+@comercio_required
+def mudar_senha_comercio(request):
+    user = request.user  # usuário real do Django
+
+    if request.method == 'POST':
+        form = ComercioMudarSenhaForm(request.POST)
+        if form.is_valid():
+            senha_atual = form.cleaned_data['senha_atual']
+            nova_senha = form.cleaned_data['nova_senha']
+            confirmar_senha = form.cleaned_data['confirmar_senha']
+
+            if not user.check_password(senha_atual):  # valida com o user
+                messages.error(request, "Senha atual incorreta.")
+            elif nova_senha != confirmar_senha:
+                messages.error(request, "As novas senhas não coincidem.")
+            else:
+                user.set_password(nova_senha)  # define a nova senha segura
+                user.save()
+                update_session_auth_hash(request, user)  # mantém o usuário logado
+                messages.success(request, "Senha alterada com sucesso.")
+                return redirect('perfil_comercio')
+    else:
+        form = ComercioMudarSenhaForm()
+
+    return render(request, 'mudar_senha_comercio.html', {'form': form})
+
 
 
 @comercio_required
