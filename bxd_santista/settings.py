@@ -120,6 +120,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -134,3 +135,5 @@ CSRF_COOKIE_SECURE = False     # Mesmo que acima
 SESSION_COOKIE_HTTPONLY = True # Pra segurança
 CSRF_COOKIE_HTTPONLY = False
 SESSION_ENGINE = 'django.contrib.sessions.backends.db' 
+
+#teste
