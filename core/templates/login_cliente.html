@@ -1,11 +1,24 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
-    <title>Login Cliente</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'css/Login_Cliente.css' %}">
 </head>
 <body>
-    <h2>Login Cliente</h2>
-    <form method="post">
+    <div class="container">
+        <div class="left-panel">
+            <h1>Bem-vindo ao BXD</h1>
+            <p>Nosso objetivo é tornar sua experiência cada vez mais simples, rápida e eficiente. Seja para encontrar os melhores serviços, comprar produtos de qualidade ou apenas acompanhar suas solicitações e pedidos, você está no lugar certo.</p>
+            <p>🛍️ Aqui você encontra comércios confiáveis, promoções exclusivas e um jeito inteligente de se conectar com o que você precisa.</p>
+            <p>📊 Acompanhe seu histórico, visualize pedidos anteriores e explore novas oportunidades — tudo na palma da sua mão.</p>
+            <p>🚀 Pronto para continuar sua jornada com a gente? Faça login e descubra como é fácil ter tudo que você procura em um só lugar.</p>
+        </div>
+
+        <div class="right-panel">
+            <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Entrar</button>
@@ -18,5 +31,8 @@
             {% endfor %}
         </ul>
     {% endif %}
+
+        </div>
+    </div>
 </body>
 </html>

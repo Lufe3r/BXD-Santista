@@ -1,0 +1,114 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom right, #cce0ff, #e6f0ff);
+    display: flex;
+}
+
+
+.sidebar {
+    width: 220px;
+    height: 100vh;
+      background: linear-gradient(to left, #3399ff, #66ccff);
+    padding: 20px;
+    color: white;
+    position: fixed;
+    left: 0;
+    top: 0;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+    z-index: 1001;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.sidebar a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    transition: background 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: #3399ff;
+}
+
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 220px; /* começa após a sidebar */
+    right: 0;
+    height: 60px;
+    background: linear-gradient(to right, #3399ff, #66ccff);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+
+.carrinho-btn {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    background-color: #007acc;
+    padding: 10px 16px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.carrinho-btn:hover {
+    background-color: #3399ff;
+}
+
+.main-content {
+    margin-left: 220px;
+    margin-top: 80px; /* espaço para a topbar */
+    padding: 30px;
+    flex: 1;
+}
+
+h1 {
+    color: #003366;
+}
+
+form {
+    margin-top: 20px;
+}
+
+select {
+    padding: 8px;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+li a {
+    color: #003366;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+li a:hover {
+    text-decoration: underline;
+}
+.main-wrapper {
+    margin-left: 50px; /* empurra todo o conteúdo para a direita */
+    width: calc(100% - 220px); /* ocupa o restante da largura da tela */
+}

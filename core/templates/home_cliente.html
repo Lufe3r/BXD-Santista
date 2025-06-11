@@ -1,29 +1,29 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <title>Home Cliente</title>
+<link rel="stylesheet" href="{% static 'css/H_cliente.css' %}">
+
 </head>
-<body>
-    
-    <h1>Bem-vindo, Cliente!</h1>
-    <a href="{% url 'home_cliente' %}">Pagina inicial</a>
-    <a href="{% url 'buscar_comercios' %}">Buscar comércios</a>
-    <br>
-    <a href="{% url 'perfil_cliente' %}">Perfil</a>
-    <br>
-    <a href="{% url 'comentario_cliente' %}">Comentários</a>
-    <br>
-    <a href="{% url 'estabelecimento_favoritados' %}">Lojas favoritas</a>
-    <br>
-    <a href="{% url 'meus_codigos_compra' %}">Ver meus códigos de compra</a>
-    <br>
-    <a href="{% url 'carrinho' %}">
-        <button>Ver Carrinho de Compras</button>
-    </a>
-    <br></br>
-    <br></br>
-    <a href="{% url 'home' %}">saia da sua conta</a>
+<div class="sidebar">
+        <h2>Cliente</h2>
+        <a href="{% url 'home_cliente' %}">Página Inicial</a>
+        <a href="{% url 'buscar_comercios' %}">Buscar Comércios</a>
+        <a href="{% url 'perfil_cliente' %}">Perfil</a>
+        <a href="{% url 'comentario_cliente' %}">Comentários</a>
+        <a href="{% url 'estabelecimento_favoritados' %}">Lojas Favoritas</a>
+        <a href="{% url 'meus_codigos_compra' %}">Códigos de Compra</a>
+        <a href="{% url 'carrinho' %}" class="carrinho">Carrinho</a>
+        <a href="{% url 'home' %}" class="sair">Sair</a>
+    </div>
+
+    <div class="main-content">
+        <h1>Bem-vindo, Cliente!</h1>
+    </div>
 </body>
+
+
 </html>
 

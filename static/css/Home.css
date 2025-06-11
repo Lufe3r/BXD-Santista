@@ -1,0 +1,45 @@
+/* Home.css */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #2076BA, #89CFF0); /* degradê do azul para um azul claro */
+    color: #fff;
+    text-align: center;
+    padding: 50px 20px;
+    margin: 0;
+    min-height: 100vh;
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+p {
+    font-size: 1.2em;
+    max-width: 600px;
+    margin: 0 auto 40px;
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+button {
+    padding: 12px 24px;
+    font-size: 1em;
+    background-color: #ffffff;
+    color: #2076BA;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button:hover {
+    background-color: #2076BA;
+    color: #ffffff;
+}

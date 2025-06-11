@@ -1,0 +1,76 @@
+body {
+background-color: #f4f4f4;
+padding: 20px 40px;
+}
+
+/* Título */
+h2 {
+margin-bottom: 20px;
+color: #333;
+}
+
+/* Navegação simples */
+a {
+display: inline-block;
+margin-right: 15px;
+margin-bottom: 10px;
+text-decoration: none;
+color: #007bff;
+font-weight: bold;
+}
+
+a:hover {
+text-decoration: underline;
+}
+
+/* Botão de carrinho */
+button {
+padding: 8px 16px;
+background-color: #007bff;
+border: none;
+color: white;
+border-radius: 5px;
+cursor: pointer;
+margin-top: 10px;
+}
+
+button:hover {
+background-color: #0056b3;
+}
+
+/* Lista de compras */
+ul {
+list-style-type: none;
+padding: 0;
+margin-top: 20px;
+}
+
+li {
+background-color: white;
+padding: 15px;
+margin-bottom: 20px;
+border-left: 5px solid #007bff;
+border-radius: 8px;
+box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+li ul {
+margin-top: 10px;
+margin-left: 20px;
+}
+
+li ul li {
+background-color: #f9f9f9;
+padding: 6px 10px;
+border-radius: 5px;
+margin-bottom: 5px;
+box-shadow: none;
+border-left: none;
+}
+
+/* Texto quando não há compras */
+p {
+margin-top: 20px;
+font-style: italic;
+color: #777;
+}

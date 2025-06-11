@@ -1,7 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>{% if form.instance.pk %}Editar Produto{% else %}Adicionar Produto{% endif %}</title>
+<link rel="stylesheet" href="{% static 'css/produto.css' %}">
+
 </head>
 <body>
     <h1>{% if form.instance.pk %}Editar Produto{% else %}Adicionar Produto{% endif %}</h1>

@@ -1,12 +1,14 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Estoque</title>
+<link rel="stylesheet" href="{% static 'css/estoque.css' %}">
 </head>
 <body>
     <h1>Estoque de Produtos</h1>
 
-    <!-- Navegação -->
+ 
     <a href="{% url 'home_comercio' %}">Página Inicial</a>
     <a href="{% url 'perfil_comercio' %}">Perfil</a>
     <a href="{% url 'estoque' %}">Estoque</a>

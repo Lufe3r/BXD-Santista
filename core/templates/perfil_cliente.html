@@ -1,45 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <a href="{% url 'home_cliente' %}">Pagina inicial</a>
-    <a href="{% url 'buscar_comercios' %}">Buscar comércios</a>
-    <br>
-    <a href="{% url 'perfil_cliente' %}">Perfil</a>
-    <br>
-    <a href="{% url 'comentario_cliente' %}">Comentários</a>
-    <br>
-    <a href="{% url 'estabelecimento_favoritados' %}">Lojas favoritas</a>
-    <br>
-    <a href="{% url 'meus_codigos_compra' %}">Ver meus códigos de compra</a>
-    <br>
-    <a href="{% url 'carrinho' %}">
-        <button>Ver Carrinho de Compras</button>
-    </a>
-    <h2>Perfil do Cliente</h2>
-    <img src="{{ cliente.imagem_perfil_url }}" alt="Imagem de perfil" width="150" height="150">
+{% load static %}
 
+<!DOCTYPE html> <html lang="pt-br"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Perfil do Cliente</title> <link rel="stylesheet" href="{% static 'css/perfil_cliente.css' %}"> </head> <body>
+php-template
+Copiar
+Editar
+<!-- Sidebar -->
+<div class="sidebar">
+    <h2>Cliente</h2>
+    <a href="{% url 'home_cliente' %}">Página Inicial</a>
+    <a href="{% url 'buscar_comercios' %}">Buscar Comércios</a>
+    <a href="{% url 'perfil_cliente' %}">Perfil</a>
+    <a href="{% url 'comentario_cliente' %}">Comentários</a>
+    <a href="{% url 'estabelecimento_favoritados' %}">Lojas Favoritas</a>
+    <a href="{% url 'meus_codigos_compra' %}">Códigos de Compra</a>
+    <a href="{% url 'carrinho' %}">Carrinho de Compras</a>
+    <a href="{% url 'home' %}">Sair da Conta</a>
+</div>
+
+<!-- Conteúdo principal -->
+<div class="main-content">
+    <h2>Perfil do Cliente</h2>
+
+    {% if cliente.imagem_perfil_url %}
+        <img src="{{ cliente.imagem_perfil_url }}" alt="Imagem de perfil" width="150" height="150">
+    {% endif %}
 
     <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
+        {% csrf_token %}
+        {{ form.as_p }}
 
-
-    <button type="submit">Salvar alterações</button>
-    <a href="{% url 'mudar_senha_cliente' %}">Mudar senha</a>
-</form>
-
-
+        <button type="submit">Salvar alterações</button>
+        <a href="{% url 'mudar_senha_cliente' %}">Mudar senha</a>
+    </form>
 
     <br>
     <a href="{% url 'home' %}">Voltar para a página inicial</a>
-</body>
-</html>
-    <br></br>
-    <br></br>
-    <br></br>
-    <a href="{% url 'home' %}">saia da sua conta</a>
-</body>
+</div>
+</body> 
 </html>
