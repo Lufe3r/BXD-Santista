@@ -1,49 +1,49 @@
-Projeto Django - Plataforma de Negócios Locais da Baixada Santista
-Descrição
-Este projeto é uma aplicação web desenvolvida em Django para conectar pequenos negócios locais da Baixada Santista a consumidores da região. O sistema permite que comerciantes se cadastrem e divulguem seus estabelecimentos, exibindo catálogo de produtos, horários de funcionamento, endereço e formas de pagamento. Os clientes podem navegar, favoritar comércios, adicionar produtos ao carrinho e simular compras.
+🚀 Plataforma de Negócios Locais da Baixada Santista
+📋 Descrição
+Aplicação web feita com Django para conectar pequenos negócios locais da Baixada Santista aos consumidores da região. Comerciantes podem cadastrar seus estabelecimentos e divulgar catálogo, horário, endereço e formas de pagamento. Clientes podem navegar, favoritar comércios, adicionar produtos ao carrinho e simular compras.
 
-Funcionalidades principais
-Cadastro e login para comerciantes (com CNPJ) e clientes.
+✨ Funcionalidades principais
+🛠️ Cadastro e login para comerciantes (via CNPJ) e clientes.
 
-Perfil do comércio com informações como nome, tipo, horário, endereço e formas de pagamento.
+🏪 Perfil completo do comércio: nome, tipo, horário, endereço e formas de pagamento.
 
-Catálogo de produtos, com imagens opcionais, estoque e categorias.
+📦 Catálogo de produtos com imagens opcionais, estoque e categorias.
 
-Busca e filtros para facilitar a navegação do cliente.
+🔍 Busca e filtros para facilitar a navegação do cliente.
 
-Sistema de carrinho de compras com opções de pagamento (pagar no local ou em casa).
+🛒 Carrinho de compras com opções de pagamento (pagar no local ou em casa).
 
-Comentários e feedbacks para comércios baseados em compras realizadas.
+💬 Comentários e feedbacks baseados em compras realizadas.
 
-Controle de estoque automático após finalização da compra.
+📉 Controle automático do estoque após finalização da compra.
 
-Sistema de favoritar comércios para clientes.
+❤️ Sistema de favoritar comércios para clientes.
 
-Página inicial com destaque para comércios e produtos mais vendidos.
+🏆 Página inicial com comércios e produtos em destaque.
 
-Suporte a imagens para perfil do comércio e produtos.
+🖼️ Suporte a imagens para perfis e produtos.
 
-Tecnologias usadas
-Python 3.x
+🛠️ Tecnologias usadas
+Python 3.x 🐍
 
 Django 4.x
 
-PostgreSQL (banco de dados)
+PostgreSQL 🐘
 
-HTML, CSS (templates do Django)
+HTML, CSS 🎨
 
-JavaScript (para interatividade básica)
+JavaScript ⚡
 
-Estrutura do projeto
-/app - Aplicação principal com models, views, templates e forms.
+📂 Estrutura do projeto
+/app - Models, views, templates e forms principais.
 
-/templates - Arquivos HTML organizados por funcionalidades (perfil, comércio, cliente, catálogo, etc).
+/templates - HTML organizados por funcionalidade.
 
-/static - Arquivos estáticos como CSS, JS e imagens.
+/static - CSS, JS e imagens estáticas.
 
-/media - Imagens carregadas pelos usuários (comércios e produtos).
+/media - Imagens carregadas pelos usuários.
 
-Como rodar o projeto localmente
+⚙️ Como rodar localmente
 Clone o repositório:
 
 bash
@@ -51,7 +51,7 @@ Copiar
 Editar
 git clone <url-do-repo>
 cd <nome-do-projeto>
-Crie e ative um ambiente virtual Python:
+Crie e ative o ambiente virtual:
 
 bash
 Copiar
@@ -65,25 +65,24 @@ bash
 Copiar
 Editar
 pip install -r requirements.txt
-Configure o banco de dados PostgreSQL e atualize settings.py com suas credenciais.
+Configure o banco de dados PostgreSQL no settings.py.
 
-Execute as migrations:
+Rode as migrations:
 
 bash
 Copiar
 Editar
 python manage.py migrate
-Crie um superusuário (opcional, para administração):
+Crie um superusuário (opcional):
 
 bash
 Copiar
 Editar
 python manage.py createsuperuser
-Inicie o servidor de desenvolvimento:
+Inicie o servidor:
 
 bash
 Copiar
 Editar
 python manage.py runserver
-Acesse o site em http://127.0.0.1:8000/
-
+Acesse em: http://127.0.0.1:8000/
