@@ -77,4 +77,4 @@ class ComercioMudarSenhaForm(forms.Form):
     confirmar_senha = forms.CharField(widget=forms.PasswordInput, label="Confirmar nova senha")
 
 
-#odeioodutra
+#denisnãofezporranenhuma
