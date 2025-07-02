@@ -1,88 +1,110 @@
-🚀 Plataforma de Negócios Locais da Baixada Santista
-📋 Descrição
-Aplicação web feita com Django para conectar pequenos negócios locais da Baixada Santista aos consumidores da região. Comerciantes podem cadastrar seus estabelecimentos e divulgar catálogo, horário, endereço e formas de pagamento. Clientes podem navegar, favoritar comércios, adicionar produtos ao carrinho e simular compras.
+# 🏙️ BXD Santista – Plataforma de Apoio aos Negócios Locais
 
-✨ Funcionalidades principais
-🛠️ Cadastro e login para comerciantes (via CNPJ) e clientes.
+Este é um sistema web desenvolvido com Django e PostgreSQL, com o objetivo de promover pequenos comércios da região da Baixada Santista, permitindo o cadastro de estabelecimentos e oferecendo um catálogo interativo aos consumidores locais.
 
-🏪 Perfil completo do comércio: nome, tipo, horário, endereço e formas de pagamento.
+## 🚀 Funcionalidades principais
 
-📦 Catálogo de produtos com imagens opcionais, estoque e categorias.
+- Cadastro e login para **comerciantes** e **clientes**
+- Catálogo de produtos por comércio
+- Sistema de **favoritos** e **comentários**
+- Carrinho de compras com simulação de pedido
+- Página de perfil para clientes e comércios
+- Sistema de controle de estoque
+- Visualização de produtos em destaque, em falta e mais vendidos
+- Suporte a imagem de perfil do comércio e de produtos
 
-🔍 Busca e filtros para facilitar a navegação do cliente.
+---
 
-🛒 Carrinho de compras com opções de pagamento (pagar no local ou em casa).
+## ⚙️ Tecnologias utilizadas
 
-💬 Comentários e feedbacks baseados em compras realizadas.
+- 💻 **Linguagem:** Python 3
+- 🌐 **Framework web:** Django
+- 🐘 **Banco de dados:** PostgreSQL
+- 🎨 **Frontend:** HTML, CSS (estilizado com Bootstrap)
+- ☁️ **Hospedagem local:** Django dev server
 
-📉 Controle automático do estoque após finalização da compra.
+---
 
-❤️ Sistema de favoritar comércios para clientes.
+## 🧾 Requisitos
 
-🏆 Página inicial com comércios e produtos em destaque.
+- Python 3.8+
+- PostgreSQL instalado
+- Git (opcional, para clonar o repositório)
 
-🖼️ Suporte a imagens para perfis e produtos.
+---
 
-🛠️ Tecnologias usadas
-Python 3.x 🐍
+## 📦 Instalação e execução
 
-Django 4.x
+1. **Clone o repositório**
 
-PostgreSQL 🐘
-
-HTML, CSS 🎨
-
-JavaScript ⚡
-
-📂 Estrutura do projeto
-/app - Models, views, templates e forms principais.
-
-/templates - HTML organizados por funcionalidade.
-
-/static - CSS, JS e imagens estáticas.
-
-/media - Imagens carregadas pelos usuários.
-
-⚙️ Como rodar localmente
-Clone o repositório:
-
-bash
-Copiar
-Editar
-git clone <url-do-repo>
-cd <nome-do-projeto>
-Crie e ative o ambiente virtual:
+```bash
+git clone https://github.com/seu-usuario/seu-repositorio.git
+cd seu-repositorio
+Crie um ambiente virtual
 
 bash
 Copiar
 Editar
 python -m venv venv
-source venv/bin/activate  # Linux/Mac
-venv\Scripts\activate     # Windows
-Instale as dependências:
+source venv/bin/activate  # no Linux/macOS
+venv\Scripts\activate     # no Windows
+Instale as dependências
 
 bash
 Copiar
 Editar
 pip install -r requirements.txt
-Configure o banco de dados PostgreSQL no settings.py.
+Configure o banco de dados PostgreSQL
 
-Rode as migrations:
+Crie um banco chamado bxd_santista e configure seu settings.py com as credenciais corretas:
+
+python
+Copiar
+Editar
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'bxd_santista',
+        'USER': 'seu_usuario',
+        'PASSWORD': 'sua_senha',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+Execute as migrações
 
 bash
 Copiar
 Editar
+python manage.py makemigrations
 python manage.py migrate
-Crie um superusuário (opcional):
+Crie um superusuário (opcional)
 
 bash
 Copiar
 Editar
 python manage.py createsuperuser
-Inicie o servidor:
+Inicie o servidor
 
 bash
 Copiar
 Editar
 python manage.py runserver
-Acesse em: http://127.0.0.1:8000/
+📁 Organização do projeto
+cpp
+Copiar
+Editar
+bxd_santista/
+├── comercio/         # app dos comerciantes
+├── cliente/          # app dos clientes
+├── produtos/         # app de gerenciamento de produtos
+├── templates/        # arquivos HTML
+├── static/           # arquivos CSS, JS e imagens
+└── manage.py         # script principal do Django
+📝 Observações
+O projeto está em desenvolvimento contínuo.
+
+Sugestões e melhorias são bem-vindas!
+
+👨‍💻 Desenvolvido por
+Lu Fernandes de Mello, Vinicius Gomes – Projeto de conclusão de semestre
